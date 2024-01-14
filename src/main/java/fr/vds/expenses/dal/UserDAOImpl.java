@@ -19,7 +19,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String TEST="INSERT INTO User (id_user, name, email) VALUES (:number, 'mulan', 'mulan@gmail.com');";
     private static final String MULAN_ROW_ID="SELECT * FROM User WHERE nickname = :nickname;";
 
-    private static final String READ_BY_ROW_ID="SELECT * FROM User WHERE _ROWID_ = :rowid;";
+    private static final String READ_BY_ID ="SELECT * FROM User WHERE user_id = :user_id;";
 
     @Override
     public void createMulan(){
@@ -42,9 +42,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User readUserById(int id){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("rowid", id);
+        mapSqlParameterSource.addValue("user_id", id);
 
-        return namedParameterJdbcTemplate.queryForObject(READ_BY_ROW_ID, mapSqlParameterSource, new UserRowMapper());
+        return namedParameterJdbcTemplate.queryForObject(READ_BY_ID, mapSqlParameterSource, new UserRowMapper());
 
     }
 
@@ -58,7 +58,7 @@ class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
        User user = new User();
-       user.setIdUser(rs.getRow());
+       user.setIdUser(rs.getInt("user_id"));
        user.setUsername(rs.getString("nickname"));
        user.setMail(rs.getString("email"));
         return user;

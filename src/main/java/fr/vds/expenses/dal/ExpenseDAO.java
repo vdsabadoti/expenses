@@ -7,5 +7,5 @@ import java.util.List;
 public interface ExpenseDAO {
     List<Expense> getExpensesByUser(int userId);
 
-    List<Expense> getExpensesByRowId(int rowId);
+    Expense getExpensesById(int expenseId);
 }

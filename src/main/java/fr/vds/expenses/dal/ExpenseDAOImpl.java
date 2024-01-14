@@ -21,7 +21,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
     private final static String READ_ALL_BY_USER="SELECT * FROM Expense WHERE owner_id = :owner_id";
 
-    private final static String READ_ALL_BY_ROWID="SELECT * FROM Expense WHERE _ROWID_ = :_ROWID_";
+    private final static String READ_ALL="SELECT * FROM Expense WHERE expense_id = :expense_id";
 
     @Override
     public List<Expense> getExpensesByUser(int userId){
@@ -33,11 +33,11 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     }
 
     @Override
-    public List<Expense> getExpensesByRowId(int rowId){
+    public Expense getExpensesById(int expenseId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("_ROWID_", rowId);
+        mapSqlParameterSource.addValue("expense_id", expenseId);
 
-        return namedParameterJdbcTemplate.query(READ_ALL_BY_USER, mapSqlParameterSource, new ExpenseRowMapper());
+        return namedParameterJdbcTemplate.queryForObject(READ_ALL, mapSqlParameterSource, new ExpenseRowMapper());
 
     }
 
@@ -48,7 +48,7 @@ class ExpenseRowMapper implements RowMapper<Expense> {
     @Override
     public Expense mapRow(ResultSet rs, int rowNum) throws SQLException {
         Expense expense = new Expense();
-        expense.setIdExpense(rs.getRow());
+        expense.setIdExpense(rs.getInt("expense_id"));
         expense.setExpenseName(rs.getString("name"));
         expense.setBalance(rs.getInt("balance"));
         expense.setDescription(rs.getString("description"));

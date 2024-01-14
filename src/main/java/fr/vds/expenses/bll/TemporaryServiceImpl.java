@@ -16,10 +16,12 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	private UserDAO userDAO;
 	private ExpenseDAO expenseDAO;
+	private ParticipantDAO participantDAO;
 
-	public TemporaryServiceImpl(UserDAO userDAO, ExpenseDAO expenseDAO) {
+	public TemporaryServiceImpl(UserDAO userDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
 		this.userDAO = userDAO;
 		this.expenseDAO = expenseDAO;
+		this.participantDAO = participantDAO;
 	}
 
 	@Override
@@ -29,18 +31,20 @@ public class TemporaryServiceImpl implements TemporaryService {
 
     @Override
     public List<Expense> getExpensesFromUser(int idUser) {
-		List<Expense> expensesLst = expenseDAO.getExpensesByUser(idUser);
-		for (Expense expense:
-			expensesLst ) {
-			//CREATE METHOD INTO PARTICIPANTDAO TO GET ALL THE PARTICIPANTS
-			//WHERE EXPENSE ID EQUALS ROWID OF EACH EXPENSE OF THE USER (expensesLst)
-			List<Participant> participantsOfExpense = new ArrayList<Participant>();
-			for (Participant participant: participantsOfExpense
-				 ) {
-				expense.addParticipantToList(participant);
+		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(idUser);
+		List<Expense> expensesLst = new ArrayList<>();
+
+		for (Participant participants : participantsByUserId) {
+			int expenseId = participants.getExpense().getIdExpense();
+			Expense expense = expenseDAO.getExpensesById(expenseId);
+			List<Participant> allTheParticipantsOfTheExpense = participantDAO.getAllTheParticipantsOfTheExpense(expenseId);
+			for (Participant participantOfTheExpense : allTheParticipantsOfTheExpense) {
+				expense.addParticipantToList(participantOfTheExpense);
 			}
+			expensesLst.add(expense);
 		}
-		return expenseDAO.getExpensesByUser(3);
+
+		return expensesLst;
     }
 
 	@Override
