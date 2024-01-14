@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Expenses</title>
+</head>
+<body>
+<main>
+
+	<label for="inputPseudo">Name : </label>
+	<div id="idPseudo" th:text="${expense.expenseName}"></div>
+	<label for="inputPseudo">Description : </label>
+	<div id="idPseudo" th:text="${expense.description}"></div>
+	
+	<div>
+		List of participants
+	</div>
+	
+	<form action="/expense/addUser" method="post" th:object="${participant}">
+		<label for="inputPseudo">Username : </label>
+		<input id="idPseudo" th:field="*{user.username}" required />
+		<label for="inputPseudo">Budget by month : </label>
+		<input id="idPseudo" th:field="*{budgetByMonth}" required />
+		<button type="submit">Add</button>
+	</form>
+	
+	<a href="/expense/done">
+		<button>Done</button>
+	</a>
+	
+	
+</main>
+
+</body>
+</html>

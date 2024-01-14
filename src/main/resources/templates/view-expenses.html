@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Expenses</title>
+</head>
+<body>
+<main>
+
+	<div th:each="item : ${expenses}">
+		<div th:text="${user.username}"></div>					
+		<div th:text="${item.idExpense}"></div>
+		<a th:href="@{/expense/detail(id=${item.idExpense})}">
+			<button>Detail</button>	
+		</a>
+	</div>
+	
+	<div>
+		<a href="/expense/create">
+			<button>Create</button>	
+		</a>
+	</div>
+	
+	
+</main>
+
+</body>
+</html>

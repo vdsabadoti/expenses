@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Expenses</title>
+</head>
+<body>
+<main>
+
+	<form action="/expense/next" method="post" th:object="${expense}">
+			<h1 class="text-center">New Expense</h1>
+				<label for="inputPseudo">Name : </label>
+				<input id="idPseudo" th:field="*{expenseName}" required />
+				<label for="inputPseudo">Description : </label>
+				<input id="idPseudo" th:field="*{description}" required />
+				<button type="submit">Next</button>	
+	</form>
+	
+	
+</main>
+
+</body>
+</html>
