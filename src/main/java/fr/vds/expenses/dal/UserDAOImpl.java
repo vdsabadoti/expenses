@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -18,6 +19,8 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String TEST="INSERT INTO User (id_user, name, email) VALUES (:number, 'mulan', 'mulan@gmail.com');";
     private static final String MULAN_ROW_ID="SELECT * FROM User WHERE nickname = :nickname;";
+
+    private static final String READ_ALL ="SELECT * FROM User";
 
     private static final String READ_BY_ID ="SELECT * FROM User WHERE user_id = :user_id;";
 
@@ -46,6 +49,11 @@ public class UserDAOImpl implements UserDAO {
 
         return namedParameterJdbcTemplate.queryForObject(READ_BY_ID, mapSqlParameterSource, new UserRowMapper());
 
+    }
+
+    @Override
+    public List<User> readAllUsers(){
+        return namedParameterJdbcTemplate.query(READ_ALL, new UserRowMapper());
     }
 
 

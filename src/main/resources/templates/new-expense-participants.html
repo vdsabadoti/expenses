@@ -11,6 +11,7 @@
 	<div id="idPseudo" th:text="${expense.expenseName}"></div>
 	<label for="inputPseudo">Description : </label>
 	<div id="idPseudo" th:text="${expense.description}"></div>
+	<div name="idExpense" id="idExpense" th:value="${expense.idExpense}" ></div>
 	
 	<div>
 		List of participants
@@ -18,7 +19,10 @@
 	
 	<form action="/expense/addUser" method="post" th:object="${participant}">
 		<label for="inputPseudo">Username : </label>
-		<input id="idPseudo" th:field="*{user.username}" required />
+		<select name="idUser" th:field="*{user.idUser}" id="idUser">
+			<option th:each="user : ${users}" th:value="${user.idUser}" th:text="${user.username}"></option>
+		</select>
+		<input id="idUser" th:field="*{user.username}" required />
 		<label for="inputPseudo">Budget by month : </label>
 		<input id="idPseudo" th:field="*{budgetByMonth}" required />
 		<button type="submit">Add</button>

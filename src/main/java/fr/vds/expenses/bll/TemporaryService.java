@@ -23,6 +23,8 @@ public interface TemporaryService {
     public void createExpense(Expense newExpense);
     
     public void createParticipantInExpense(Participant participant, int idExpense);
+
+    List<User> getAllTheUsersFromDatabase();
     //create line in table ParticipantsOfExpense
 
 }

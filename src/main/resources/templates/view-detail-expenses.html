@@ -7,13 +7,21 @@
 <body>
 <main>
 
-	<div th:each="item : ${expenses}">
-		<div th:text="${user.username}"></div>					
-		<div th:text="${item.idExpense}"></div>
-		<a th:href="@{/expense/detail(id=${item.idExpense})}">
-			<button>Detail</button>	
+	<div th:text="${expense.expenseName}"></div>
+	<div th:text="${expense.description}"></div>
+	<p>Balance : </p>
+	<div th:text="${expense.balance}"></div>
+
+	<div th:each="line : ${expense.lineList}">
+		<div th:text="${line.label}"></div>
+		<div th:text="${line.value}"></div>
+		<a th:href="@{/line/detail(id=${line.idLine})}">
+			<button>Detail</button>
 		</a>
 	</div>
+
+
+		<button>Add</button>
 	
 	
 </main>
