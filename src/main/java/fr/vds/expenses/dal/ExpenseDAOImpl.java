@@ -27,6 +27,11 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
     private final static String CREATE_EXPENSE="INSERT INTO Expense (name, owner_id, description) VALUES\n" +
             "    (:name, :owner_id, :description);";
+
+    private final static String UPDATE_BUDGET="UPDATE Expense SET budget_by_month = :budget_by_month WHERE expense_id = :expense_id";
+
+    private final static String DELETE_EXPENSE="DELETE FROM Expense WHERE expense_id = :expense_id";
+
     @Override
     public List<Expense> getExpensesByUser(int userId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
@@ -57,6 +62,23 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         namedParameterJdbcTemplate.update(CREATE_EXPENSE, mapSqlParameterSource, keyHolder);
 
         expense.setIdExpense((Integer) keyHolder.getKey());
+    }
+
+    @Override
+    public void updateBudgetExpense(int idExpense, int budget){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("budget_by_month", budget);
+        mapSqlParameterSource.addValue("expense_id", idExpense);
+
+        namedParameterJdbcTemplate.update(UPDATE_BUDGET, mapSqlParameterSource);
+    }
+
+    @Override
+    public void deleteExpense(int idExpense){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("expense_id", idExpense);
+
+        namedParameterJdbcTemplate.update(DELETE_EXPENSE, mapSqlParameterSource);
     }
 
 }

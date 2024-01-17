@@ -12,6 +12,10 @@
 	<p>Balance : </p>
 	<div th:text="${expense.balance}"></div>
 
+	<a th:href="@{/expense/delete(id=${expense.idExpense})}">
+		<button>Delete</button>
+	</a>
+
 	<div th:each="line : ${expense.lineList}">
 		<div th:text="${line.label}"></div>
 		<div th:text="${line.value}"></div>

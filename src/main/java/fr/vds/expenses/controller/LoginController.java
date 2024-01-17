@@ -1,6 +1,7 @@
 package fr.vds.expenses.controller;
 
 import fr.vds.expenses.bll.LoginService;
+import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
 import fr.vds.expenses.bo.Expense;
 import fr.vds.expenses.bo.Participant;
@@ -19,9 +20,12 @@ public class LoginController {
     private TemporaryService temporaryService;
     private LoginService loginService;
 
-    public LoginController(TemporaryService temporaryService, LoginService loginService){
+    private ParticipantService participantService;
+
+    public LoginController(ParticipantService participantService, TemporaryService temporaryService, LoginService loginService){
         this.loginService = loginService;
         this.temporaryService = temporaryService;
+        this.participantService = participantService;
     }
 
     @ModelAttribute("user")
@@ -44,7 +48,7 @@ public class LoginController {
     public String userOneConnection(
             @ModelAttribute("user") User user
             ){
-        User userOne = temporaryService.getUserFromDataBase(1);
+        User userOne = participantService.getUserFromDataBase(1);
         //RAF : control userOne is not null
         user.setUsername(userOne.getUsername());
         user.setIdUser(userOne.getIdUser());
@@ -55,7 +59,7 @@ public class LoginController {
     public String userTwoConnection(
             @ModelAttribute("user") User user
     ){
-        User userTwo = temporaryService.getUserFromDataBase(2);
+        User userTwo = participantService.getUserFromDataBase(2);
         //RAF : control userOne is not null
         user.setUsername(userTwo.getUsername());
         user.setIdUser(userTwo.getIdUser());
@@ -80,10 +84,7 @@ public class LoginController {
             Model model
     ){
         if ("corsaires".equals(password)) {
-            List<Expense> expenseListOfUser = temporaryService.getExpensesFromUser(user.getIdUser());
-            model.addAttribute("user", user);
-            model.addAttribute("expenses", expenseListOfUser);
-            return "view-expenses";
+            return "redirect:/expenses";
         }else{
             //add message error
             return "password-control";

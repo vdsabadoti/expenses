@@ -9,7 +9,7 @@ public class Participant {
     private int balance;
     private int budgetByMonth;
 
-    private Expense expense;
+    private Expense expense =  new Expense();
 
     public Participant(int idParticipant) {
         this.idParticipant = idParticipant;

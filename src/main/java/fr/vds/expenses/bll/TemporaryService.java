@@ -11,9 +11,6 @@ public interface TemporaryService {
     //public void createNewLine(?);
 
     //public void modifyLine(?);
-
-    public User getUserFromDataBase(int idUser);
-
     public List<Expense> getExpensesFromUser(int idUser);
     
     public Expense getSingleExpense(int ifExpense);
@@ -21,10 +18,10 @@ public interface TemporaryService {
     //of participants
     
     public void createExpense(Expense newExpense);
-    
-    public void createParticipantInExpense(Participant participant, int idExpense);
 
-    List<User> getAllTheUsersFromDatabase();
+    void loadBudgetExpense(int idExpense);
+
+    void deleteExpense(int idExpense);
     //create line in table ParticipantsOfExpense
 
 }

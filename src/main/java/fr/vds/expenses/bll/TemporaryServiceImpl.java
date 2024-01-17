@@ -3,12 +3,12 @@ package fr.vds.expenses.bll;
 import fr.vds.expenses.bo.Expense;
 import fr.vds.expenses.bo.Line;
 import fr.vds.expenses.bo.Participant;
-import fr.vds.expenses.bo.User;
 import fr.vds.expenses.dal.ExpenseDAO;
 import fr.vds.expenses.dal.LineDAO;
 import fr.vds.expenses.dal.ParticipantDAO;
 import fr.vds.expenses.dal.UserDAO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +21,18 @@ public class TemporaryServiceImpl implements TemporaryService {
 	private ParticipantDAO participantDAO;
 	private LineDAO lineDAO;
 
-	public TemporaryServiceImpl(LineDAO lineDAO, UserDAO userDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
+	private ParticipantService participantService;
+
+	public TemporaryServiceImpl(ParticipantService participantService, LineDAO lineDAO, UserDAO userDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
 		this.lineDAO = lineDAO;
 		this.userDAO = userDAO;
 		this.expenseDAO = expenseDAO;
 		this.participantDAO = participantDAO;
+		this.participantService = participantService;
 	}
 
 	@Override
-    public User getUserFromDataBase(int idUser) {
-		return userDAO.readUserById(idUser);
-    }
-
-    @Override
-    public List<Expense> getExpensesFromUser(int idUser) {
+	public List<Expense> getExpensesFromUser(int idUser) {
 		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(idUser);
 		List<Expense> expensesLst = new ArrayList<>();
 
@@ -45,20 +43,17 @@ public class TemporaryServiceImpl implements TemporaryService {
 			expensesLst.add(expense);
 		}
 		return expensesLst;
-    }
+	}
 
 	@Override
 	public Expense getSingleExpense(int idExpense) {
 		Expense expense = expenseDAO.getExpensesById(idExpense);
-		//CREATE ALL THE RELATIONSHIPS OF THE EXPENSE
-		////// GET ALL THE PARTICIPANTS OF THE EXPENSE
-		List<Participant> allTheParticipantsOfTheExpense = participantDAO.getAllTheParticipantsOfTheExpense(idExpense);
+		List<Participant> allTheParticipantsOfTheExpense = participantService.getAllTheParticipantsOfExpense(idExpense);
 		for (Participant participantOfTheExpense : allTheParticipantsOfTheExpense) {
 			expense.addParticipantToList(participantOfTheExpense);
 		}
-		////// GET ALL THE LINES OF THE EXPENSE
 		List<Line> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(idExpense);
-		for (Line line : allTheLinesOfTheExpense){
+		for (Line line : allTheLinesOfTheExpense) {
 			expense.getLineList().add(line);
 		}
 		return expense;
@@ -70,13 +65,23 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
-	public void createParticipantInExpense(Participant participant, int idExpense) {
-		// TODO Auto-generated method stub
-		
+	public void loadBudgetExpense(int idExpense) {
+		List<Participant> lstParticipants = participantService.getAllTheParticipantsOfExpense(idExpense);
+		int budget = 0;
+		for (Participant participant : lstParticipants) {
+			budget += participant.getBudgetByMonth();
+		}
+		expenseDAO.updateBudgetExpense(idExpense, budget);
 	}
 
+
+	@Transactional
 	@Override
-	public List<User> getAllTheUsersFromDatabase(){
-		return userDAO.readAllUsers();
+	public void deleteExpense(int idExpense) {
+		List<Participant> participants = participantService.getAllTheParticipantsOfExpense(idExpense);
+		for (Participant participant : participants) {
+			participantService.deleteParticipant(participant.getIdParticipant());
+		}
+		expenseDAO.deleteExpense(idExpense);
 	}
 }

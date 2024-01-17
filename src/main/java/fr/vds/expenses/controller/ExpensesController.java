@@ -1,6 +1,7 @@
 package fr.vds.expenses.controller;
 
 import fr.vds.expenses.bll.LoginService;
+import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
 import fr.vds.expenses.bo.Expense;
 import fr.vds.expenses.bo.Participant;
@@ -18,9 +19,12 @@ public class ExpensesController {
     private TemporaryService temporaryService;
     private LoginService loginService;
 
-    public ExpensesController(TemporaryService temporaryService, LoginService loginService){
+    private ParticipantService participantService;
+
+    public ExpensesController(ParticipantService participantService, TemporaryService temporaryService, LoginService loginService) {
         this.loginService = loginService;
         this.temporaryService = temporaryService;
+        this.participantService = participantService;
     }
 
     /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
@@ -37,7 +41,7 @@ public class ExpensesController {
 
     @GetMapping("expense/detail")
     public String showSingleExpense(
-            @RequestParam(name="id") int idExpense,
+            @RequestParam(name = "id") int idExpense,
             Model model
     ) {
         Expense expense = temporaryService.getSingleExpense(idExpense);
@@ -89,13 +93,15 @@ public class ExpensesController {
         temporaryService.createExpense(newExpense);
 
         //GET USERS FROM DATABASE
-        List<User> lstUsers = temporaryService.getAllTheUsersFromDatabase();
+        List<User> lstUsers = participantService.getAllTheUsersFromDatabase();
+        List<Participant> participants = participantService.getAllTheParticipantsOfExpense(newExpense.getIdExpense());
 
         Participant newParticipant = new Participant();
 
         model.addAttribute("users", lstUsers);
         model.addAttribute("expense", newExpense);
         model.addAttribute("participant", newParticipant);
+        model.addAttribute("participants", participants);
         return "new-expense-participants";
     }
 
@@ -116,62 +122,73 @@ public class ExpensesController {
 
     @PostMapping("/expense/addUser")
     public String newExpenseDone(
-            @RequestParam(name="idExpense") int idExpense,
+            @RequestParam(name = "idExpense") int idExpense,
             @ModelAttribute("participant") Participant participant,
             Model model
     ) {
-        temporaryService.createParticipantInExpense(participant, idExpense);
+        participantService.createParticipantInExpense(participant, idExpense);
         Expense expenseUpdated = temporaryService.getSingleExpense(idExpense);
+
+        List<User> lstUsers = participantService.getAllTheUsersFromDatabase();
+        List<Participant> participants = participantService.getAllTheParticipantsOfExpense(idExpense);
 
         Participant newParticipant = new Participant();
         model.addAttribute("expense", expenseUpdated);
         model.addAttribute("participant", newParticipant);
+        model.addAttribute("users", lstUsers);
+        model.addAttribute("participants", participants);
         return "new-expense-participants";
     }
 
     /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 4 ====> POST => CREATE EXPENSE
+    //SLIDE 4 ====> GET => CREATE EXPENSE
     //RETURN SLIDE 5
 
     /*
      * Redirection to slide 5
-     *
+     * MAJ budget of the expense thanks to partipants budgets
      * */
 
-    ////////////////// STEP ONE : END ///////////////////////////
-
+    @GetMapping("expense/create/done")
+    public String expenseCompleted(
+            @SessionAttribute("user") User user,
+            @RequestParam(name = "key") int idExpense,
+            Model model
+    ) {
+        temporaryService.loadBudgetExpense(idExpense);
+        return "redirect:/expenses";
+    }
 
     /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 5 ====> GET => ADD DEBT BUTTON
+    //SLIDE EXTRA ====> GET => DELETE EXPENSE BOUTON
     //RETURN SLIDE 6
 
-    /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 6 ====> POST => ADD BUTTON
-    //RETURN SLIDE 5
+    @GetMapping("expense/delete")
+    public String deleteExpense(
+            @RequestParam(name = "id") int idExpense,
+            Model model
+    ) {
+        temporaryService.deleteExpense(idExpense);
+        return "redirect:/expenses";
+    }
 
     /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 5 ====> GET => ADD REFUND BUTTON
-    //RETURN SLIDE 7
 
     /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 7 ====> POST => ADD BUTTON
-    //RETURN SLIDE 5
+    //SLIDE EXTRA ====> GET => SHOW ALL EXPENSES
+    //EVERYTIME WE MUST GO BACK TO THE EXPENSES LIST : REDIRECT TO THIS FUNCTION
 
-    /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 5 ====> GET => DELETE BUTTON
-    //RETURN SLIDE 2
-
-    /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 5 ====> GET => DETAIL BUTTON
-    //RETURN SLIDE 8
-
-    /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 8 ====> POST => DELETE BUTTON
-    //RETURN SLIDE 5
-
-    /*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-    //SLIDE 8 ====> POST => OK BUTTON
-    //RETURN SLIDE 5
-
+    @GetMapping("expenses")
+    public String homePage(
+            @SessionAttribute("user") User user,
+            Model model
+    ) {
+        List<Expense> expenseListOfUser = temporaryService.getExpensesFromUser(user.getIdUser());
+        model.addAttribute("user", user);
+        model.addAttribute("expenses", expenseListOfUser);
+        return "view-expenses";
+    }
 
 }
+
+/*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
