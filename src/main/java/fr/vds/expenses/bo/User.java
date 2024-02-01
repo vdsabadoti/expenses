@@ -11,13 +11,17 @@ public class User {
     private String mail;
     private List<Expense> lstExpenses = new ArrayList<Expense>();
     private String password;
+    private String image;
+    private String quote;
 
-    public User(int idUser, String username, String mail, List<Expense> lstExpenses, String password) {
+    public User(int idUser, String username, String mail, List<Expense> lstExpenses, String password, String image, String quote) {
         this.idUser = idUser;
         this.username = username;
         this.mail = mail;
         this.lstExpenses = lstExpenses;
         this.password = password;
+        this.image = "image in progress";
+        this.quote = "all you need is love";
     }
 
     public User(int idUser) {
@@ -65,6 +69,22 @@ public class User {
 
     public void setLstExpenses(List<Expense> lstExpenses) {
         this.lstExpenses = lstExpenses;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getQuote() {
+        return quote;
+    }
+
+    public void setQuote(String quote) {
+        this.quote = quote;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.vds.expenses.adaptations.LocalDateTimeTypeAdapter;
 import fr.vds.expenses.adaptations.LocalDateTypeAdapter;
+import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,35 +16,23 @@ import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @org.springframework.web.bind.annotation.RestController
-public class RestController {
+public class UserRestController {
 
     private TemporaryService temporaryService;
+    private ParticipantService participantService;
 
-    RestController(TemporaryService temporaryService){
+    UserRestController(TemporaryService temporaryService, ParticipantService participantService){
         this.temporaryService =temporaryService;
+        this.participantService = participantService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/hello")
-    public String HelloWorld(){
-        Gson g = new Gson();
-        return g.toJson("oui");
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/hellomoto")
-    public String HelloWorldWithParam(
-            @RequestParam(name = "id") int idExpense
-    ){
-        Gson g = new Gson();
-        return g.toJson(idExpense);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/expense")
-    public String ExpenseOne(){
+    @RequestMapping(method = RequestMethod.GET, path= "/getallusers")
+    public String getAllUsers(){
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getSingleExpense(3));
+        return g.toJson(participantService.getAllTheUsersFromDatabase());
     }
 
 }
