@@ -16,34 +16,25 @@ import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @org.springframework.web.bind.annotation.RestController
-public class UserRestController {
+public class ExpenseRestController {
 
     private TemporaryService temporaryService;
     private ParticipantService participantService;
 
-    UserRestController(TemporaryService temporaryService, ParticipantService participantService){
+    ExpenseRestController(TemporaryService temporaryService, ParticipantService participantService){
         this.temporaryService =temporaryService;
         this.participantService = participantService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getallusers")
-    public String getAllUsers(){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(participantService.getAllTheUsersFromDatabase());
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/getuser")
-    public String getUserByID(
+    @RequestMapping(method = RequestMethod.GET, path= "/getexpenses")
+    public String getAllExpenses(
             @RequestParam(name = "id") int idUser
     ){
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(participantService.getUserFromDataBase(idUser));
+        return g.toJson(temporaryService.getExpensesFromUser(idUser));
     }
 
 }
