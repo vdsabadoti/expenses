@@ -2,11 +2,9 @@ package fr.vds.expenses.bll;
 
 import fr.vds.expenses.bo.Expense;
 import fr.vds.expenses.bo.Line;
+import fr.vds.expenses.bo.LineDetail;
 import fr.vds.expenses.bo.Participant;
-import fr.vds.expenses.dal.ExpenseDAO;
-import fr.vds.expenses.dal.LineDAO;
-import fr.vds.expenses.dal.ParticipantDAO;
-import fr.vds.expenses.dal.UserDAO;
+import fr.vds.expenses.dal.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,19 +14,19 @@ import java.util.List;
 @Service
 public class TemporaryServiceImpl implements TemporaryService {
 
-	private UserDAO userDAO;
 	private ExpenseDAO expenseDAO;
 	private ParticipantDAO participantDAO;
 	private LineDAO lineDAO;
+	private RefundAndDebtDAO refundAndDebtDAO;
 
 	private ParticipantService participantService;
 
-	public TemporaryServiceImpl(ParticipantService participantService, LineDAO lineDAO, UserDAO userDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
+	public TemporaryServiceImpl(RefundAndDebtDAO refundAndDebtDAO, ParticipantService participantService, LineDAO lineDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
 		this.lineDAO = lineDAO;
-		this.userDAO = userDAO;
 		this.expenseDAO = expenseDAO;
 		this.participantDAO = participantDAO;
 		this.participantService = participantService;
+		this.refundAndDebtDAO = refundAndDebtDAO;
 	}
 
 	@Override
@@ -72,6 +70,11 @@ public class TemporaryServiceImpl implements TemporaryService {
 			budget += participant.getBudgetByMonth();
 		}
 		expenseDAO.updateBudgetExpense(idExpense, budget);
+	}
+
+	@Override
+	public List<LineDetail> getLineDetailByLineExpenseId(int lineExpenseId){
+		return this.refundAndDebtDAO.getLineDetailByLineId(lineExpenseId);
 	}
 
 

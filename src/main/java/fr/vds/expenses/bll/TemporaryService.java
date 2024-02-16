@@ -1,6 +1,7 @@
 package fr.vds.expenses.bll;
 
 import fr.vds.expenses.bo.Expense;
+import fr.vds.expenses.bo.LineDetail;
 import fr.vds.expenses.bo.Participant;
 import fr.vds.expenses.bo.User;
 import java.util.List;
@@ -20,6 +21,8 @@ public interface TemporaryService {
     public void createExpense(Expense newExpense);
 
     void loadBudgetExpense(int idExpense);
+
+    List<LineDetail> getLineDetailByLineExpenseId(int lineExpenseId);
 
     void deleteExpense(int idExpense);
     //create line in table ParticipantsOfExpense

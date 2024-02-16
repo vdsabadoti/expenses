@@ -2,17 +2,27 @@ package fr.vds.expenses.bo;
 
 import java.util.Objects;
 
-public abstract class LineDetail {
+public class LineDetail {
 
     private int idLineDetail;
+    private User user;
     private int value;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public LineDetail() {
     }
 
-    public LineDetail(int idLineDetail, int value) {
+    public LineDetail(int idLineDetail, int value, User user) {
         this.idLineDetail = idLineDetail;
         this.value = value;
+        this.user = user;
     }
 
     public int getIdLineDetail() {
@@ -39,15 +49,16 @@ public abstract class LineDetail {
                 '}';
     }
 
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof LineDetail)) return false;
-        if (!super.equals(object)) return false;
-        LineDetail that = (LineDetail) object;
-        return idLineDetail == that.idLineDetail;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LineDetail that = (LineDetail) o;
+        return idLineDetail == that.idLineDetail && Objects.equals(user, that.user);
     }
 
+    @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), idLineDetail);
+        return Objects.hash(idLineDetail, user);
     }
 }

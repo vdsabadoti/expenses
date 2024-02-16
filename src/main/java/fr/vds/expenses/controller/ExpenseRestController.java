@@ -36,7 +36,9 @@ public class ExpenseRestController {
                 .create();
         return g.toJson(temporaryService.getExpensesFromUser(idUser));
 
-    }    @RequestMapping(method = RequestMethod.GET, path= "/getsingleexpense")
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path= "/getsingleexpense")
     public String getSingleExpense(
             @RequestParam(name = "id") int idExpense
     ){
@@ -45,6 +47,17 @@ public class ExpenseRestController {
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
         return g.toJson(temporaryService.getSingleExpense(idExpense));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path= "/getlinedetail")
+    public String getLineDetail(
+            @RequestParam(name = "id") int idLine
+    ){
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson(temporaryService.getLineDetailByLineExpenseId(idLine));
     }
 
 }
