@@ -9,6 +9,8 @@ public interface ParticipantDAO {
 
     List<Participant> getAllTheParticipantsOfTheExpense(int expenseId);
 
+    Participant getParticipantById(int participantId);
+
     void createPaticipant(Participant participant);
 
     void deleteParticipant(int idParticipant);

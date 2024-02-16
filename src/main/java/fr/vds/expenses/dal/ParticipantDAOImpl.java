@@ -22,6 +22,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final String SELECT_PARTICIPANTS_BY_USER_ID = "SELECT * FROM ParticipantsOfExpense WHERE user_id = :user_id;";
+    private static final String SELECT_PARTICIPANTS_BY_ID = "SELECT * FROM ParticipantsOfExpense WHERE participant_id = :participant_id;";
 
     private static final String SELECT_PARTICIPANTS_BY_EXPENSE="SELECT * FROM ParticipantsOfExpense WHERE expense_id = :expense_id;";
 
@@ -45,6 +46,15 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         mapSqlParameterSource.addValue("expense_id", expenseId);
 
         return namedParameterJdbcTemplate.query(SELECT_PARTICIPANTS_BY_EXPENSE, mapSqlParameterSource, new ParticipantRowMapper());
+
+    }
+
+    @Override
+    public Participant getParticipantById(int participantId){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("participant_id", participantId);
+
+        return namedParameterJdbcTemplate.queryForObject(SELECT_PARTICIPANTS_BY_ID, mapSqlParameterSource, new ParticipantRowMapper());
 
     }
 

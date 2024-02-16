@@ -1,9 +1,6 @@
 package fr.vds.expenses.bll;
 
-import fr.vds.expenses.bo.Expense;
-import fr.vds.expenses.bo.Line;
-import fr.vds.expenses.bo.LineDetail;
-import fr.vds.expenses.bo.Participant;
+import fr.vds.expenses.bo.*;
 import fr.vds.expenses.dal.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +15,17 @@ public class TemporaryServiceImpl implements TemporaryService {
 	private ParticipantDAO participantDAO;
 	private LineDAO lineDAO;
 	private RefundAndDebtDAO refundAndDebtDAO;
+	private UserDAO userDAO;
 
 	private ParticipantService participantService;
 
-	public TemporaryServiceImpl(RefundAndDebtDAO refundAndDebtDAO, ParticipantService participantService, LineDAO lineDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
+	public TemporaryServiceImpl(UserDAO userDAO, RefundAndDebtDAO refundAndDebtDAO, ParticipantService participantService, LineDAO lineDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
 		this.lineDAO = lineDAO;
 		this.expenseDAO = expenseDAO;
 		this.participantDAO = participantDAO;
 		this.participantService = participantService;
 		this.refundAndDebtDAO = refundAndDebtDAO;
+		this.userDAO = userDAO;
 	}
 
 	@Override
@@ -43,6 +42,13 @@ public class TemporaryServiceImpl implements TemporaryService {
 		return expensesLst;
 	}
 
+	@Override
+	public Line getLineFromExpense(int idLine){
+		Line line = lineDAO.getLineFromExpense(idLine);
+		User user = this.userDAO.readUserById(line.getPayor().getIdUser());
+		line.setPayor(user);
+		return line;
+	}
 	@Override
 	public Expense getSingleExpense(int idExpense) {
 		Expense expense = expenseDAO.getExpensesById(idExpense);
@@ -74,9 +80,12 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	@Override
 	public List<LineDetail> getLineDetailByLineExpenseId(int lineExpenseId){
-		return this.refundAndDebtDAO.getLineDetailByLineId(lineExpenseId);
+		List<LineDetail> lineDetails = this.refundAndDebtDAO.getLineDetailByLineId(lineExpenseId);
+		for (LineDetail line : lineDetails) {
+			line.setUser(this.userDAO.readUserById(line.getUser().getIdUser()));
+		}
+		return lineDetails;
 	}
-
 
 	@Transactional
 	@Override

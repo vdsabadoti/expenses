@@ -60,4 +60,15 @@ public class ExpenseRestController {
         return g.toJson(temporaryService.getLineDetailByLineExpenseId(idLine));
     }
 
+    @RequestMapping(method = RequestMethod.GET, path= "/getline")
+    public String getLine(
+            @RequestParam(name = "id") int idLine
+    ){
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson(temporaryService.getLineFromExpense(idLine));
+    }
+
 }

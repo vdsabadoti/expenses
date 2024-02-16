@@ -1,9 +1,7 @@
 package fr.vds.expenses.bll;
 
-import fr.vds.expenses.bo.Expense;
-import fr.vds.expenses.bo.LineDetail;
-import fr.vds.expenses.bo.Participant;
-import fr.vds.expenses.bo.User;
+import fr.vds.expenses.bo.*;
+
 import java.util.List;
 
 public interface TemporaryService {
@@ -13,7 +11,9 @@ public interface TemporaryService {
 
     //public void modifyLine(?);
     public List<Expense> getExpensesFromUser(int idUser);
-    
+
+    Line getLineFromExpense(int idLine);
+
     public Expense getSingleExpense(int ifExpense);
     //Create object Expense with Expense table and ParticipantsOfExpense as well (for the list
     //of participants

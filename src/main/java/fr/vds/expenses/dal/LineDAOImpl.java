@@ -22,6 +22,9 @@ public class LineDAOImpl implements LineDAO {
     private static final String SELECT_ALL_LINES_BY_EXPENSE_ID =
             "SELECT * FROM LinesOfExpense WHERE expense_id =:expense_id";
 
+    private static final String FIND_BY_LINE_ID =
+            "SELECT * FROM LinesOfExpense WHERE line_of_expense_id =:line_of_expense_id";
+
 
     @Override
     public List<Line> getAllLinesFromExpense(int idExpense){
@@ -29,6 +32,14 @@ public class LineDAOImpl implements LineDAO {
         mapSqlParameterSource.addValue("expense_id", idExpense);
 
         return namedParameterJdbcTemplate.query(SELECT_ALL_LINES_BY_EXPENSE_ID, mapSqlParameterSource, new LineRowMapper());
+    }
+
+    @Override
+    public Line getLineFromExpense(int idLine){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("line_of_expense_id", idLine);
+
+        return namedParameterJdbcTemplate.queryForObject(FIND_BY_LINE_ID, mapSqlParameterSource, new LineRowMapper());
     }
 
 }
@@ -39,11 +50,12 @@ class LineRowMapper implements RowMapper<Line> {
     public Line mapRow(ResultSet rs, int rowNum) throws SQLException {
         Line line = new Line();
         line.setIdLine(rs.getInt("line_of_expense_id"));
-        line.setPayor(new Participant(rs.getInt("payor_id")));
+        line.setPayor(new User(rs.getInt("payor_id")));
         line.setLineDetailList(new ArrayList<LineDetail>());
         line.setValue(rs.getInt("value"));
         line.setDate(LocalDate.parse(rs.getString("date")));
         line.setLabel(rs.getString("label"));
+        line.setDebtOrRefund(rs.getInt("debt_or_refund"));
         return line;
     }
 }
