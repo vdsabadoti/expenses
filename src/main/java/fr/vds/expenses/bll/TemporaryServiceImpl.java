@@ -51,16 +51,27 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 	@Override
 	public Expense getSingleExpense(int idExpense) {
+		//GET EXPENSE FROM DB
 		Expense expense = expenseDAO.getExpensesById(idExpense);
+		//GET THE PARTICIPANTS OF THE EXPENSE FROM DB THANKS TO ID
 		List<Participant> allTheParticipantsOfTheExpense = participantService.getAllTheParticipantsOfExpense(idExpense);
+		//POPULATE THE PARTICIPANTS OF THE EXPENSE
 		for (Participant participantOfTheExpense : allTheParticipantsOfTheExpense) {
 			expense.addParticipantToList(participantOfTheExpense);
 		}
+		//GET THE LINES OF THE EXPENSE FROM DB THANKS TO ID
 		List<Line> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(idExpense);
+		//FOR EACH LINE, GET THE LINE DETAILS FROM DB THANKS TO ID
 		for (Line line : allTheLinesOfTheExpense) {
+			//GET THE LINEDETAILS OF THE LINE FROM DB THANKS TO ID
+			List<LineDetail> detailsOfTheLine =  getLineDetailByLineExpenseId(line.getIdLine());
+			//POPULATE LINE WITH LINEDETAILS
+			line.setLineDetailList(detailsOfTheLine);
+			//POPULATE THE LINES OF THE EXPENSE
 			expense.getLineList().add(line);
 		}
 		return expense;
+		//TODO OPTIMISATION : only one request in DB with jointures
 	}
 
 	@Override

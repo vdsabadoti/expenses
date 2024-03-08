@@ -37,7 +37,7 @@ public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
             LineDetail lineDetail = new LineDetail();
             lineDetail.setUser(new User(rs.getInt("user_id")));
             lineDetail.setIdLineDetail(rs.getInt("detail_of_a_line_id"));
-            lineDetail.setValue(rs.getInt("value"));
+            lineDetail.setValue(rs.getFloat("value"));
             return lineDetail;
         }
     }

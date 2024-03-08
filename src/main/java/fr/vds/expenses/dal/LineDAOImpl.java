@@ -52,7 +52,7 @@ class LineRowMapper implements RowMapper<Line> {
         line.setIdLine(rs.getInt("line_of_expense_id"));
         line.setPayor(new User(rs.getInt("payor_id")));
         line.setLineDetailList(new ArrayList<LineDetail>());
-        line.setValue(rs.getInt("value"));
+        line.setValue(rs.getFloat("value"));
         line.setDate(LocalDate.parse(rs.getString("date")));
         line.setLabel(rs.getString("label"));
         line.setDebtOrRefund(rs.getInt("debt_or_refund"));

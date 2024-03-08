@@ -6,7 +6,7 @@ public class LineDetail {
 
     private int idLineDetail;
     private User user;
-    private int value;
+    private float value;
 
     public User getUser() {
         return user;
@@ -19,7 +19,7 @@ public class LineDetail {
     public LineDetail() {
     }
 
-    public LineDetail(int idLineDetail, int value, User user) {
+    public LineDetail(int idLineDetail, float value, User user) {
         this.idLineDetail = idLineDetail;
         this.value = value;
         this.user = user;
@@ -33,11 +33,11 @@ public class LineDetail {
         this.idLineDetail = idLineDetail;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(float value) {
         this.value = value;
     }
 

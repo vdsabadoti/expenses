@@ -98,7 +98,7 @@ class ParticipantRowMapper implements RowMapper<Participant> {
         Participant participant = new Participant();
         participant.setExpense(new Expense(rs.getInt("expense_id")));
         participant.setIdParticipant(rs.getInt("participant_id"));
-        participant.setBudgetByMonth(rs.getInt("budget_by_month"));
+        participant.setBudgetByMonth(rs.getFloat("budget_by_month"));
         participant.setUser(new User(rs.getInt("user_id")));
         return participant;
     }

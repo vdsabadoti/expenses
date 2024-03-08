@@ -6,8 +6,8 @@ public class Participant {
 
     private int idParticipant;
     private User user;
-    private int balance;
-    private int budgetByMonth;
+    private float balance;
+    private float budgetByMonth;
 
     private Expense expense =  new Expense();
 
@@ -18,7 +18,7 @@ public class Participant {
     public Participant() {
     }
 
-    public Participant(Expense expense, int idParticipant, User user, int balance, int budgetByMonth) {
+    public Participant(Expense expense, int idParticipant, User user, float balance, float budgetByMonth) {
         this.idParticipant = idParticipant;
         this.user = user;
         this.balance = balance;
@@ -34,11 +34,11 @@ public class Participant {
         this.expense = expense;
     }
 
-    public int getBudgetByMonth() {
+    public float getBudgetByMonth() {
 		return budgetByMonth;
 	}
 
-	public void setBudgetByMonth(int budgetByMonth) {
+	public void setBudgetByMonth(float budgetByMonth) {
 		this.budgetByMonth = budgetByMonth;
 	}
 
@@ -58,11 +58,11 @@ public class Participant {
         this.user = user;
     }
 
-    public int getBalance() {
+    public float getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(float balance) {
         this.balance = balance;
     }
 

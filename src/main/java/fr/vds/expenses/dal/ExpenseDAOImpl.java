@@ -90,9 +90,9 @@ class ExpenseRowMapper implements RowMapper<Expense> {
         Expense expense = new Expense();
         expense.setIdExpense(rs.getInt("expense_id"));
         expense.setExpenseName(rs.getString("name"));
-        expense.setBalance(rs.getInt("balance"));
+        expense.setBalance(rs.getFloat("balance"));
         expense.setDescription(rs.getString("description"));
-        expense.setBudgetByMonth(rs.getInt("budget_by_month"));
+        expense.setBudgetByMonth(rs.getFloat("budget_by_month"));
         expense.setParticipantList(new ArrayList<Participant>());
         return expense;
     }

@@ -7,15 +7,15 @@ import java.util.Objects;
 public class Expense {
 
     private int idExpense;
-    private int balance;
-    private int budgetByMonth;
+    private float balance;
+    private float budgetByMonth;
     private String expenseName;
     private String description;
     private User owner;
     private List<Participant> participantList = new ArrayList<Participant>();
     private List<Line> lineList = new ArrayList<Line>();
 
-    public Expense(int budgetByMonth, int idExpense, int balance, String expenseName, String description, User owner, List<Participant> participantList, List<Line> lineList) {
+    public Expense(float budgetByMonth, int idExpense, float balance, String expenseName, String description, User owner, List<Participant> participantList, List<Line> lineList) {
         this.idExpense = idExpense;
         this.balance = balance;
         this.expenseName = expenseName;
@@ -54,11 +54,11 @@ public class Expense {
         this.idExpense = idExpense;
     }
 
-    public int getBalance() {
+    public float getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(float balance) {
         this.balance = balance;
     }
 
@@ -106,11 +106,11 @@ public class Expense {
         this.lineList = lineList;
     }
 
-    public int getBudgetByMonth() {
+    public float getBudgetByMonth() {
         return budgetByMonth;
     }
 
-    public void setBudgetByMonth(int budgetByMonth) {
+    public void setBudgetByMonth(float budgetByMonth) {
         this.budgetByMonth = budgetByMonth;
     }
 }

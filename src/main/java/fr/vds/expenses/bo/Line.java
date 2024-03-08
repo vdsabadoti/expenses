@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Line {
 
     private int idLine;
-    private int value;
+    private float value;
     private LocalDate date;
     private String label;
     private User payor;
@@ -22,7 +22,7 @@ public class Line {
         this.idLine = idLine;
     }
 
-    public Line(int idLine, int value, LocalDate date, String label, User payor, List<LineDetail> lineDetailList, int debtOrRefund) {
+    public Line(int idLine, float value, LocalDate date, String label, User payor, List<LineDetail> lineDetailList, int debtOrRefund) {
         this.idLine = idLine;
         this.value = value;
         this.date = date;
@@ -52,11 +52,11 @@ public class Line {
         this.idLine = idLine;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(float value) {
         this.value = value;
     }
 
