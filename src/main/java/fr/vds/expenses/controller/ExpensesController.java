@@ -3,7 +3,7 @@ package fr.vds.expenses.controller;
 import fr.vds.expenses.bll.LoginService;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
-import fr.vds.expenses.bo.Expense;
+import fr.vds.expenses.bo.Group;
 import fr.vds.expenses.bo.Participant;
 import fr.vds.expenses.bo.User;
 import org.springframework.stereotype.Controller;
@@ -44,8 +44,8 @@ public class ExpensesController {
             @RequestParam(name = "id") int idExpense,
             Model model
     ) {
-        Expense expense = temporaryService.getSingleExpense(idExpense);
-        model.addAttribute("expense", expense);
+        Group group = temporaryService.getSingleExpense(idExpense);
+        model.addAttribute("expense", group);
         return "view-detail-expenses";
     }
 
@@ -65,8 +65,8 @@ public class ExpensesController {
     public String newExpense(
             Model model
     ) {
-        Expense expense = new Expense();
-        model.addAttribute("expense", expense);
+        Group group = new Group();
+        model.addAttribute("expense", group);
         return "new-expense";
     }
 
@@ -85,21 +85,21 @@ public class ExpensesController {
 
     @PostMapping("expense/next")
     public String newExpenseParticipants(
-            @ModelAttribute("expense") Expense newExpense,
+            @ModelAttribute("expense") Group newGroup,
             @ModelAttribute("user") User user,
             Model model
     ) {
-        newExpense.setOwner(user);
-        temporaryService.createExpense(newExpense);
+        newGroup.setOwner(user);
+        temporaryService.createExpense(newGroup);
 
         //GET USERS FROM DATABASE
         List<User> lstUsers = participantService.getAllTheUsersFromDatabase();
-        List<Participant> participants = participantService.getAllTheParticipantsOfExpense(newExpense.getIdExpense());
+        List<Participant> participants = participantService.getAllTheParticipantsOfExpense(newGroup.getId());
 
         Participant newParticipant = new Participant();
 
         model.addAttribute("users", lstUsers);
-        model.addAttribute("expense", newExpense);
+        model.addAttribute("expense", newGroup);
         model.addAttribute("participant", newParticipant);
         model.addAttribute("participants", participants);
         return "new-expense-participants";
@@ -127,13 +127,13 @@ public class ExpensesController {
             Model model
     ) {
         participantService.createParticipantInExpense(participant, idExpense);
-        Expense expenseUpdated = temporaryService.getSingleExpense(idExpense);
+        Group groupUpdated = temporaryService.getSingleExpense(idExpense);
 
         List<User> lstUsers = participantService.getAllTheUsersFromDatabase();
         List<Participant> participants = participantService.getAllTheParticipantsOfExpense(idExpense);
 
         Participant newParticipant = new Participant();
-        model.addAttribute("expense", expenseUpdated);
+        model.addAttribute("expense", groupUpdated);
         model.addAttribute("participant", newParticipant);
         model.addAttribute("users", lstUsers);
         model.addAttribute("participants", participants);
@@ -183,9 +183,9 @@ public class ExpensesController {
             @SessionAttribute("user") User user,
             Model model
     ) {
-        List<Expense> expenseListOfUser = temporaryService.getExpensesFromUser(user.getIdUser());
+        List<Group> groupListOfUser = temporaryService.getExpensesFromUser(user.getId());
         model.addAttribute("user", user);
-        model.addAttribute("expenses", expenseListOfUser);
+        model.addAttribute("expenses", groupListOfUser);
         return "view-expenses";
     }
 

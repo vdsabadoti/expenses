@@ -3,15 +3,10 @@ package fr.vds.expenses.controller;
 import fr.vds.expenses.bll.LoginService;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
-import fr.vds.expenses.bo.Expense;
-import fr.vds.expenses.bo.Participant;
 import fr.vds.expenses.bo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @SessionAttributes({"user"})
@@ -51,7 +46,7 @@ public class LoginController {
         User userOne = participantService.getUserFromDataBase(1);
         //RAF : control userOne is not null
         user.setUsername(userOne.getUsername());
-        user.setIdUser(userOne.getIdUser());
+        user.setId(userOne.getId());
         return "password-control";
     }
 
@@ -62,7 +57,7 @@ public class LoginController {
         User userTwo = participantService.getUserFromDataBase(2);
         //RAF : control userOne is not null
         user.setUsername(userTwo.getUsername());
-        user.setIdUser(userTwo.getIdUser());
+        user.setId(userTwo.getId());
         return "password-control";
     }
 

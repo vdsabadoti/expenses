@@ -1,6 +1,6 @@
 package fr.vds.expenses.dal;
 
-import fr.vds.expenses.bo.LineDetail;
+import fr.vds.expenses.bo.Detail;
 import fr.vds.expenses.bo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,22 +23,22 @@ public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
 
 
     @Override
-    public List<LineDetail> getLineDetailByLineId(int idExpenseLine) {
+    public List<Detail> getLineDetailByLineId(int idExpenseLine) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("expense_id", idExpenseLine);
 
         return namedParameterJdbcTemplate.query(SELECT_DETAIL_LINE_BY_LINE_group_id, mapSqlParameterSource, new LineDetailRowMapper());
     }
 }
-    class LineDetailRowMapper implements RowMapper<LineDetail> {
+    class LineDetailRowMapper implements RowMapper<Detail> {
 
         @Override
-        public LineDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
-            LineDetail lineDetail = new LineDetail();
-            lineDetail.setUser(new User(rs.getInt("user_id")));
-            lineDetail.setIdLineDetail(rs.getInt("id"));
-            lineDetail.setValue(rs.getFloat("value"));
-            return lineDetail;
+        public Detail mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Detail detail = new Detail();
+            detail.setUser(new User(rs.getInt("user_id")));
+            detail.setId(rs.getInt("id"));
+            detail.setValue(rs.getFloat("value"));
+            return detail;
         }
     }
 

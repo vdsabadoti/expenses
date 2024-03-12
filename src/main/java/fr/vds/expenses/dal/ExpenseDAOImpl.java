@@ -1,6 +1,6 @@
 package fr.vds.expenses.dal;
 
-import fr.vds.expenses.bo.Expense;
+import fr.vds.expenses.bo.Group;
 import fr.vds.expenses.bo.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,7 +33,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     private final static String DELETE_EXPENSE="DELETE FROM Groups WHERE id = :id";
 
     @Override
-    public List<Expense> getExpensesByUser(int userId){
+    public List<Group> getExpensesByUser(int userId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("owner_id", userId);
 
@@ -42,7 +42,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     }
 
     @Override
-    public Expense getExpensesById(int expenseId){
+    public Group getExpensesById(int expenseId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", expenseId);
 
@@ -52,16 +52,16 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
 
     @Override
-    public void createExpense(Expense expense){
+    public void createExpense(Group group){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("name", expense.getExpenseName());
-        mapSqlParameterSource.addValue("owner_id", expense.getOwner().getIdUser());
-        mapSqlParameterSource.addValue("description", expense.getDescription());
+        mapSqlParameterSource.addValue("name", group.getName());
+        mapSqlParameterSource.addValue("owner_id", group.getOwner().getId());
+        mapSqlParameterSource.addValue("description", group.getDescription());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(CREATE_EXPENSE, mapSqlParameterSource, keyHolder);
 
-        expense.setIdExpense((Integer) keyHolder.getKey());
+        group.setId((Integer) keyHolder.getKey());
     }
 
     @Override
@@ -83,17 +83,17 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
 }
 
-class ExpenseRowMapper implements RowMapper<Expense> {
+class ExpenseRowMapper implements RowMapper<Group> {
 
     @Override
-    public Expense mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Expense expense = new Expense();
-        expense.setIdExpense(rs.getInt("id"));
-        expense.setExpenseName(rs.getString("name"));
-        expense.setBalance(rs.getFloat("balance"));
-        expense.setDescription(rs.getString("description"));
-        expense.setBudgetByMonth(rs.getFloat("budget_by_month"));
-        expense.setParticipantList(new ArrayList<Participant>());
-        return expense;
+    public Group mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Group group = new Group();
+        group.setId(rs.getInt("id"));
+        group.setName(rs.getString("name"));
+        group.setBalance(rs.getFloat("balance"));
+        group.setDescription(rs.getString("description"));
+        group.setBudgetByMonth(rs.getFloat("budget_by_month"));
+        group.setParticipantList(new ArrayList<Participant>());
+        return group;
     }
 }

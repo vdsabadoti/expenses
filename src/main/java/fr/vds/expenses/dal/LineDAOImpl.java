@@ -27,7 +27,7 @@ public class LineDAOImpl implements LineDAO {
 
 
     @Override
-    public List<Line> getAllLinesFromExpense(int idExpense){
+    public List<Expense> getAllLinesFromExpense(int idExpense){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("group_id", idExpense);
 
@@ -35,7 +35,7 @@ public class LineDAOImpl implements LineDAO {
     }
 
     @Override
-    public Line getLineFromExpense(int idLine){
+    public Expense getLineFromExpense(int idLine){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", idLine);
 
@@ -44,18 +44,18 @@ public class LineDAOImpl implements LineDAO {
 
 }
 
-class LineRowMapper implements RowMapper<Line> {
+class LineRowMapper implements RowMapper<Expense> {
 
     @Override
-    public Line mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Line line = new Line();
-        line.setIdLine(rs.getInt("id"));
-        line.setPayor(new User(rs.getInt("payor_id")));
-        line.setLineDetailList(new ArrayList<LineDetail>());
-        line.setValue(rs.getFloat("value"));
-        line.setDate(LocalDate.parse(rs.getString("date")));
-        line.setLabel(rs.getString("label"));
-        line.setDebtOrRefund(rs.getInt("debt_or_refund"));
-        return line;
+    public Expense mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Expense expense = new Expense();
+        expense.setId(rs.getInt("id"));
+        expense.setPayor(new User(rs.getInt("payor_id")));
+        expense.setLineDetailList(new ArrayList<Detail>());
+        expense.setValue(rs.getFloat("value"));
+        expense.setDate(LocalDate.parse(rs.getString("date")));
+        expense.setLabel(rs.getString("label"));
+        expense.setDebtOrRefund(rs.getInt("debt_or_refund"));
+        return expense;
     }
 }

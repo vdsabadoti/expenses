@@ -7,19 +7,19 @@
 <body>
 <main>
 
-	<div th:text="${expense.expenseName}"></div>
-	<div th:text="${expense.description}"></div>
+	<div th:text="${group.expenseName}"></div>
+	<div th:text="${group.description}"></div>
 	<p>Balance : </p>
-	<div th:text="${expense.balance}"></div>
+	<div th:text="${group.balance}"></div>
 
-	<a th:href="@{/expense/delete(id=${expense.idExpense})}">
+	<a th:href="@{/group/delete(id=${group.idExpense})}">
 		<button>Delete</button>
 	</a>
 
-	<div th:each="line : ${expense.lineList}">
-		<div th:text="${line.label}"></div>
-		<div th:text="${line.value}"></div>
-		<a th:href="@{/line/detail(id=${line.idLine})}">
+	<div th:each="expense : ${group.expenseList}">
+		<div th:text="${expense.label}"></div>
+		<div th:text="${expense.value}"></div>
+		<a th:href="@{/expense/detail(id=${expense.idLine})}">
 			<button>Detail</button>
 		</a>
 	</div>

@@ -29,54 +29,54 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
-	public List<Expense> getExpensesFromUser(int idUser) {
+	public List<Group> getExpensesFromUser(int idUser) {
 		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(idUser);
-		List<Expense> expensesLst = new ArrayList<>();
+		List<Group> expensesLst = new ArrayList<>();
 
 		for (Participant participants : participantsByUserId) {
 			//FIND EXPENSE THANKS TO USER ID (THE USER IS THE PARTICIPANT)
-			int expenseId = participants.getExpense().getIdExpense();
-			Expense expense = getSingleExpense(expenseId);
-			expensesLst.add(expense);
+			int expenseId = participants.getExpense().getId();
+			Group group = getSingleExpense(expenseId);
+			expensesLst.add(group);
 		}
 		return expensesLst;
 	}
 
 	@Override
-	public Line getLineFromExpense(int idLine){
-		Line line = lineDAO.getLineFromExpense(idLine);
-		User user = this.userDAO.readUserById(line.getPayor().getIdUser());
-		line.setPayor(user);
-		return line;
+	public Expense getLineFromExpense(int idLine){
+		Expense expense = lineDAO.getLineFromExpense(idLine);
+		User user = this.userDAO.readUserById(expense.getPayor().getId());
+		expense.setPayor(user);
+		return expense;
 	}
 	@Override
-	public Expense getSingleExpense(int idExpense) {
+	public Group getSingleExpense(int idExpense) {
 		//GET EXPENSE FROM DB
-		Expense expense = expenseDAO.getExpensesById(idExpense);
+		Group group = expenseDAO.getExpensesById(idExpense);
 		//GET THE PARTICIPANTS OF THE EXPENSE FROM DB THANKS TO ID
 		List<Participant> allTheParticipantsOfTheExpense = participantService.getAllTheParticipantsOfExpense(idExpense);
 		//POPULATE THE PARTICIPANTS OF THE EXPENSE
 		for (Participant participantOfTheExpense : allTheParticipantsOfTheExpense) {
-			expense.addParticipantToList(participantOfTheExpense);
+			group.addParticipantToList(participantOfTheExpense);
 		}
 		//GET THE LINES OF THE EXPENSE FROM DB THANKS TO ID
-		List<Line> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(idExpense);
+		List<Expense> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(idExpense);
 		//FOR EACH LINE, GET THE LINE DETAILS FROM DB THANKS TO ID
-		for (Line line : allTheLinesOfTheExpense) {
+		for (Expense expense : allTheLinesOfTheExpense) {
 			//GET THE LINEDETAILS OF THE LINE FROM DB THANKS TO ID
-			List<LineDetail> detailsOfTheLine =  getLineDetailByLineExpenseId(line.getIdLine());
+			List<Detail> detailsOfTheLine =  getLineDetailByLineExpenseId(expense.getId());
 			//POPULATE LINE WITH LINEDETAILS
-			line.setLineDetailList(detailsOfTheLine);
+			expense.setLineDetailList(detailsOfTheLine);
 			//POPULATE THE LINES OF THE EXPENSE
-			expense.getLineList().add(line);
+			group.getLineList().add(expense);
 		}
-		return expense;
+		return group;
 		//TODO OPTIMISATION : only one request in DB with jointures
 	}
 
 	@Override
-	public void createExpense(Expense newExpense) {
-		expenseDAO.createExpense(newExpense);
+	public void createExpense(Group newGroup) {
+		expenseDAO.createExpense(newGroup);
 	}
 
 	@Override
@@ -90,12 +90,12 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
-	public List<LineDetail> getLineDetailByLineExpenseId(int lineExpenseId){
-		List<LineDetail> lineDetails = this.refundAndDebtDAO.getLineDetailByLineId(lineExpenseId);
-		for (LineDetail line : lineDetails) {
-			line.setUser(this.userDAO.readUserById(line.getUser().getIdUser()));
+	public List<Detail> getLineDetailByLineExpenseId(int lineExpenseId){
+		List<Detail> details = this.refundAndDebtDAO.getLineDetailByLineId(lineExpenseId);
+		for (Detail line : details) {
+			line.setUser(this.userDAO.readUserById(line.getUser().getId()));
 		}
-		return lineDetails;
+		return details;
 	}
 
 	@Transactional
@@ -103,7 +103,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 	public void deleteExpense(int idExpense) {
 		List<Participant> participants = participantService.getAllTheParticipantsOfExpense(idExpense);
 		for (Participant participant : participants) {
-			participantService.deleteParticipant(participant.getIdParticipant());
+			participantService.deleteParticipant(participant.getId());
 		}
 		expenseDAO.deleteExpense(idExpense);
 	}

@@ -32,8 +32,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	public void createParticipantInExpense(Participant participant, int idExpense) {
-		if (!userIsAlreadyParticipant(idExpense, participant.getUser().getIdUser())){
-			participant.getExpense().setIdExpense(idExpense);
+		if (!userIsAlreadyParticipant(idExpense, participant.getUser().getId())){
+			participant.getExpense().setId(idExpense);
 			participantDAO.createPaticipant(participant);
 		}
 	}
@@ -48,7 +48,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public List<Participant> getAllTheParticipantsOfExpense(int idExpense){
 		List<Participant> participants = participantDAO.getAllTheParticipantsOfTheExpense(idExpense);
 		for (Participant participant : participants){
-			User user = getUserFromDataBase(participant.getUser().getIdUser());
+			User user = getUserFromDataBase(participant.getUser().getId());
 			participant.setUser(user);
 		}
 		return participants;

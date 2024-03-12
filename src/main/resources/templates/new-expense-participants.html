@@ -8,9 +8,9 @@
 <main>
 
 	<label for="idPseudo">Name : </label>
-	<div id="idPseudo" th:text="${expense.expenseName}"></div>
+	<div id="idPseudo" th:text="${group.expenseName}"></div>
 	<label for="idDescription">Description : </label>
-	<div id="idDescription" th:text="${expense.description}"></div>
+	<div id="idDescription" th:text="${group.description}"></div>
 	
 	<div>
 		<label for="lstParticipants">List of participants</label>
@@ -19,18 +19,18 @@
 		</ul>
 	</div>
 	
-	<form action="/expense/addUser" method="post" th:object="${participant}">
-		<input name="idExpense" id="idExpense" th:value="${expense.idExpense}" style="visibility: hidden;" ></input>
+	<form action="/group/addUser" method="post" th:object="${participant}">
+		<input name="idExpense" id="idExpense" th:value="${group.idExpense}" style="visibility: hidden;" ></input>
 		<label for="idUser">Username : </label>
-		<select name="idUser" th:field="*{user.idUser}" id="idUser">
-			<option th:each="user : ${users}" th:value="${user.idUser}" th:text="${user.username}"></option>
+		<select name="idUser" th:field="*{user.id}" id="idUser">
+			<option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
 		</select>
 		<label for="idBudget">Budget by month : </label>
 		<input id="idBudget" th:field="*{budgetByMonth}" required />
 		<button type="submit">Add</button>
 	</form>
 	
-	<a th:href="@{/expense/create/done(key=${expense.idExpense})}">
+	<a th:href="@{/group/create/done(key=${group.idExpense})}">
 		<button>Done</button>
 	</a>
 	

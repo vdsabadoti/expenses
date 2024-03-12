@@ -1,6 +1,5 @@
 package fr.vds.expenses.bll;
 
-import fr.vds.expenses.bo.Expense;
 import fr.vds.expenses.bo.Participant;
 import fr.vds.expenses.bo.User;
 

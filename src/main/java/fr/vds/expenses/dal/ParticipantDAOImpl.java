@@ -1,6 +1,6 @@
 package fr.vds.expenses.dal;
 
-import fr.vds.expenses.bo.Expense;
+import fr.vds.expenses.bo.Group;
 import fr.vds.expenses.bo.Participant;
 import fr.vds.expenses.bo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,14 +61,14 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     @Override
     public void createPaticipant(Participant participant){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("group_id", participant.getExpense().getIdExpense());
-        mapSqlParameterSource.addValue("user_id", participant.getUser().getIdUser());
+        mapSqlParameterSource.addValue("group_id", participant.getExpense().getId());
+        mapSqlParameterSource.addValue("user_id", participant.getUser().getId());
         mapSqlParameterSource.addValue("budget_by_month", participant.getBudgetByMonth());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(CREATE_PARTICIPANT, mapSqlParameterSource, keyHolder);
 
-        participant.setIdParticipant((Integer) keyHolder.getKey());
+        participant.setId((Integer) keyHolder.getKey());
 
     }
 
@@ -96,8 +96,8 @@ class ParticipantRowMapper implements RowMapper<Participant> {
     @Override
     public Participant mapRow(ResultSet rs, int rowNum) throws SQLException {
         Participant participant = new Participant();
-        participant.setExpense(new Expense(rs.getInt("group_id")));
-        participant.setIdParticipant(rs.getInt("id"));
+        participant.setExpense(new Group(rs.getInt("group_id")));
+        participant.setId(rs.getInt("id"));
         participant.setBudgetByMonth(rs.getFloat("budget_by_month"));
         participant.setUser(new User(rs.getInt("user_id")));
         return participant;

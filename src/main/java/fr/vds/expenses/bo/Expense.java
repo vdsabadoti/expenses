@@ -1,116 +1,102 @@
 package fr.vds.expenses.bo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Expense {
 
-    private int idExpense;
-    private float balance;
-    private float budgetByMonth;
-    private String expenseName;
-    private String description;
-    private User owner;
-    private List<Participant> participantList = new ArrayList<Participant>();
-    private List<Line> lineList = new ArrayList<Line>();
-
-    public Expense(float budgetByMonth, int idExpense, float balance, String expenseName, String description, User owner, List<Participant> participantList, List<Line> lineList) {
-        this.idExpense = idExpense;
-        this.balance = balance;
-        this.expenseName = expenseName;
-        this.description = description;
-        this.owner = owner;
-        this.participantList = participantList;
-        this.lineList = lineList;
-        this.budgetByMonth = budgetByMonth;
-    }
-
-    public Expense(int idExpense) {
-        this.idExpense = idExpense;
-    }
+    private int id;
+    private float value;
+    private LocalDate date;
+    private String label;
+    private User payor;
+    private List<Detail> detailList = new ArrayList<Detail>();
+    private int debtOrRefund;
 
     public Expense() {
     }
 
+    public Expense(int id) {
+        this.id = id;
+    }
+
+    public Expense(int id, float value, LocalDate date, String label, User payor, List<Detail> detailList, int debtOrRefund) {
+        this.id = id;
+        this.value = value;
+        this.date = date;
+        this.label = label;
+        this.payor = payor;
+        this.detailList = detailList;
+        this.debtOrRefund = debtOrRefund;
+    }
 
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof Expense)) return false;
         if (!super.equals(object)) return false;
         Expense expense = (Expense) object;
-        return idExpense == expense.idExpense;
+        return id == expense.id;
     }
 
     public int hashCode() {
-        return Objects.hash(super.hashCode(), idExpense);
+        return Objects.hash(super.hashCode(), id);
     }
 
-    public int getIdExpense() {
-        return idExpense;
+    public int getId() {
+        return id;
     }
 
-    public void setIdExpense(int idExpense) {
-        this.idExpense = idExpense;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public float getBalance() {
-        return balance;
+    public float getValue() {
+        return value;
     }
 
-    public void setBalance(float balance) {
-        this.balance = balance;
+    public void setValue(float value) {
+        this.value = value;
     }
 
-    public String getExpenseName() {
-        return expenseName;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setExpenseName(String expenseName) {
-        this.expenseName = expenseName;
+    public int getDebtOrRefund() {
+        return debtOrRefund;
     }
 
-    public String getDescription() {
-        return description;
+    public void setDebtOrRefund(int debtOrRefund) {
+        this.debtOrRefund = debtOrRefund;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public User getOwner() {
-        return owner;
+    public String getLabel() {
+        return label;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public List<Participant> getParticipantList() {
-        return participantList;
+    public User getPayor() {
+        return payor;
     }
 
-    public void setParticipantList(List<Participant> participantList) {
-        this.participantList = participantList;
+    public void setPayor(User payor) {
+        this.payor = payor;
     }
 
-    public void addParticipantToList(Participant participant) {
-        this.participantList.add(participant);
+    public List<Detail> getLineDetailList() {
+        return detailList;
     }
 
-    public List<Line> getLineList() {
-        return lineList;
-    }
-
-    public void setLineList(List<Line> lineList) {
-        this.lineList = lineList;
-    }
-
-    public float getBudgetByMonth() {
-        return budgetByMonth;
-    }
-
-    public void setBudgetByMonth(float budgetByMonth) {
-        this.budgetByMonth = budgetByMonth;
+    public void setLineDetailList(List<Detail> detailList) {
+        this.detailList = detailList;
     }
 }

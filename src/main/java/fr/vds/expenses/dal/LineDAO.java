@@ -1,11 +1,11 @@
 package fr.vds.expenses.dal;
 
-import fr.vds.expenses.bo.Line;
+import fr.vds.expenses.bo.Expense;
 
 import java.util.List;
 
 public interface LineDAO {
-    List<Line> getAllLinesFromExpense(int idExpense);
+    List<Expense> getAllLinesFromExpense(int idExpense);
 
-    Line getLineFromExpense(int idLine);
+    Expense getLineFromExpense(int idLine);
 }

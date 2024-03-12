@@ -4,34 +4,34 @@ import java.util.Objects;
 
 public class Participant {
 
-    private int idParticipant;
+    private int id;
     private User user;
     private float balance;
     private float budgetByMonth;
 
-    private Expense expense =  new Expense();
+    private Group group =  new Group();
 
-    public Participant(int idParticipant) {
-        this.idParticipant = idParticipant;
+    public Participant(int id) {
+        this.id = id;
     }
 
     public Participant() {
     }
 
-    public Participant(Expense expense, int idParticipant, User user, float balance, float budgetByMonth) {
-        this.idParticipant = idParticipant;
+    public Participant(Group group, int id, User user, float balance, float budgetByMonth) {
+        this.id = id;
         this.user = user;
         this.balance = balance;
         this.budgetByMonth = budgetByMonth;
-        this.expense = expense;
+        this.group = group;
     }
 
-    public Expense getExpense() {
-        return expense;
+    public Group getExpense() {
+        return group;
     }
 
-    public void setExpense(Expense expense) {
-        this.expense = expense;
+    public void setExpense(Group group) {
+        this.group = group;
     }
 
     public float getBudgetByMonth() {
@@ -42,12 +42,12 @@ public class Participant {
 		this.budgetByMonth = budgetByMonth;
 	}
 
-	public int getIdParticipant() {
-        return idParticipant;
+	public int getId() {
+        return id;
     }
 
-    public void setIdParticipant(int idParticipant) {
-        this.idParticipant = idParticipant;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -71,10 +71,10 @@ public class Participant {
         if (!(object instanceof Participant)) return false;
         if (!super.equals(object)) return false;
         Participant that = (Participant) object;
-        return idParticipant == that.idParticipant;
+        return id == that.id;
     }
 
     public int hashCode() {
-        return Objects.hash(super.hashCode(), idParticipant);
+        return Objects.hash(super.hashCode(), id);
     }
 }
