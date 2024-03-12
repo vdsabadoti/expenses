@@ -18,16 +18,16 @@ public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static final String SELECT_DETAIL_LINE_BY_LINE_EXPENSE_ID =
-            "SELECT * FROM DetailsOfALine WHERE line_of_expense_id =:line_of_expense_id";
+    private static final String SELECT_DETAIL_LINE_BY_LINE_group_id =
+            "SELECT * FROM Details WHERE expense_id =:expense_id";
 
 
     @Override
     public List<LineDetail> getLineDetailByLineId(int idExpenseLine) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("line_of_expense_id", idExpenseLine);
+        mapSqlParameterSource.addValue("expense_id", idExpenseLine);
 
-        return namedParameterJdbcTemplate.query(SELECT_DETAIL_LINE_BY_LINE_EXPENSE_ID, mapSqlParameterSource, new LineDetailRowMapper());
+        return namedParameterJdbcTemplate.query(SELECT_DETAIL_LINE_BY_LINE_group_id, mapSqlParameterSource, new LineDetailRowMapper());
     }
 }
     class LineDetailRowMapper implements RowMapper<LineDetail> {
@@ -36,7 +36,7 @@ public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
         public LineDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
             LineDetail lineDetail = new LineDetail();
             lineDetail.setUser(new User(rs.getInt("user_id")));
-            lineDetail.setIdLineDetail(rs.getInt("detail_of_a_line_id"));
+            lineDetail.setIdLineDetail(rs.getInt("id"));
             lineDetail.setValue(rs.getFloat("value"));
             return lineDetail;
         }

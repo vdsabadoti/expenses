@@ -21,16 +21,16 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static final String SELECT_PARTICIPANTS_BY_USER_ID = "SELECT * FROM ParticipantsOfExpense WHERE user_id = :user_id;";
-    private static final String SELECT_PARTICIPANTS_BY_ID = "SELECT * FROM ParticipantsOfExpense WHERE participant_id = :participant_id;";
+    private static final String SELECT_PARTICIPANTS_BY_USER_ID = "SELECT * FROM Participants WHERE user_id = :user_id;";
+    private static final String SELECT_PARTICIPANTS_BY_ID = "SELECT * FROM Participants WHERE id = :id;";
 
-    private static final String SELECT_PARTICIPANTS_BY_EXPENSE="SELECT * FROM ParticipantsOfExpense WHERE expense_id = :expense_id;";
+    private static final String SELECT_PARTICIPANTS_BY_EXPENSE="SELECT * FROM Participants WHERE group_id = :group_id;";
 
-    private static final String CREATE_PARTICIPANT="INSERT INTO ParticipantsOfExpense (expense_id, user_id, budget_by_month) VALUES (:expense_id, :user_id, :budget_by_month);";
+    private static final String CREATE_PARTICIPANT="INSERT INTO Participants (group_id, user_id, budget_by_month) VALUES (:group_id, :user_id, :budget_by_month);";
 
-    private final static String DELETE_PARTICIPANT="DELETE FROM ParticipantsOfExpense WHERE participant_id = :participant_id";
+    private final static String DELETE_PARTICIPANT="DELETE FROM Participants WHERE id = :id";
 
-    private static final String COUNT_PARTICIPANTS_FROM_EXPENSE_BY_USER_ID="SELECT COUNT(*) FROM ParticipantsOfExpense WHERE user_id = :user_id AND expense_id = :expense_id";
+    private static final String COUNT_PARTICIPANTS_FROM_EXPENSE_BY_USER_ID="SELECT COUNT(*) FROM Participants WHERE user_id = :user_id AND group_id = :group_id";
     @Override
     public List<Participant> readParticipantsByUserId(int userId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
@@ -43,7 +43,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     @Override
     public List<Participant> getAllTheParticipantsOfTheExpense(int expenseId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("expense_id", expenseId);
+        mapSqlParameterSource.addValue("group_id", expenseId);
 
         return namedParameterJdbcTemplate.query(SELECT_PARTICIPANTS_BY_EXPENSE, mapSqlParameterSource, new ParticipantRowMapper());
 
@@ -52,7 +52,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     @Override
     public Participant getParticipantById(int participantId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("participant_id", participantId);
+        mapSqlParameterSource.addValue("id", participantId);
 
         return namedParameterJdbcTemplate.queryForObject(SELECT_PARTICIPANTS_BY_ID, mapSqlParameterSource, new ParticipantRowMapper());
 
@@ -61,7 +61,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     @Override
     public void createPaticipant(Participant participant){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("expense_id", participant.getExpense().getIdExpense());
+        mapSqlParameterSource.addValue("group_id", participant.getExpense().getIdExpense());
         mapSqlParameterSource.addValue("user_id", participant.getUser().getIdUser());
         mapSqlParameterSource.addValue("budget_by_month", participant.getBudgetByMonth());
 
@@ -75,7 +75,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     @Override
     public void deleteParticipant(int idParticipant){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("participant_id", idParticipant);
+        mapSqlParameterSource.addValue("id", idParticipant);
 
         namedParameterJdbcTemplate.update(DELETE_PARTICIPANT, mapSqlParameterSource);
     }
@@ -84,7 +84,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     public int countParticipantsByUserId(int idIUser, int idExpense){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("user_id", idIUser);
-        mapSqlParameterSource.addValue("expense_id", idExpense);
+        mapSqlParameterSource.addValue("group_id", idExpense);
 
         return namedParameterJdbcTemplate.queryForObject(COUNT_PARTICIPANTS_FROM_EXPENSE_BY_USER_ID, mapSqlParameterSource, Integer.class);
     }
@@ -96,8 +96,8 @@ class ParticipantRowMapper implements RowMapper<Participant> {
     @Override
     public Participant mapRow(ResultSet rs, int rowNum) throws SQLException {
         Participant participant = new Participant();
-        participant.setExpense(new Expense(rs.getInt("expense_id")));
-        participant.setIdParticipant(rs.getInt("participant_id"));
+        participant.setExpense(new Expense(rs.getInt("group_id")));
+        participant.setIdParticipant(rs.getInt("id"));
         participant.setBudgetByMonth(rs.getFloat("budget_by_month"));
         participant.setUser(new User(rs.getInt("user_id")));
         return participant;

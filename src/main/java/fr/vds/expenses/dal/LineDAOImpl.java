@@ -19,25 +19,25 @@ public class LineDAOImpl implements LineDAO {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static final String SELECT_ALL_LINES_BY_EXPENSE_ID =
-            "SELECT * FROM LinesOfExpense WHERE expense_id =:expense_id";
+    private static final String SELECT_ALL_LINES_BY_group_id =
+            "SELECT * FROM Expenses WHERE group_id =:group_id";
 
     private static final String FIND_BY_LINE_ID =
-            "SELECT * FROM LinesOfExpense WHERE line_of_expense_id =:line_of_expense_id";
+            "SELECT * FROM Expenses WHERE id =:id";
 
 
     @Override
     public List<Line> getAllLinesFromExpense(int idExpense){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("expense_id", idExpense);
+        mapSqlParameterSource.addValue("group_id", idExpense);
 
-        return namedParameterJdbcTemplate.query(SELECT_ALL_LINES_BY_EXPENSE_ID, mapSqlParameterSource, new LineRowMapper());
+        return namedParameterJdbcTemplate.query(SELECT_ALL_LINES_BY_group_id, mapSqlParameterSource, new LineRowMapper());
     }
 
     @Override
     public Line getLineFromExpense(int idLine){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("line_of_expense_id", idLine);
+        mapSqlParameterSource.addValue("id", idLine);
 
         return namedParameterJdbcTemplate.queryForObject(FIND_BY_LINE_ID, mapSqlParameterSource, new LineRowMapper());
     }
@@ -49,7 +49,7 @@ class LineRowMapper implements RowMapper<Line> {
     @Override
     public Line mapRow(ResultSet rs, int rowNum) throws SQLException {
         Line line = new Line();
-        line.setIdLine(rs.getInt("line_of_expense_id"));
+        line.setIdLine(rs.getInt("id"));
         line.setPayor(new User(rs.getInt("payor_id")));
         line.setLineDetailList(new ArrayList<LineDetail>());
         line.setValue(rs.getFloat("value"));

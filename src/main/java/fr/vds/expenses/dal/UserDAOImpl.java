@@ -17,12 +17,12 @@ public class UserDAOImpl implements UserDAO {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static final String TEST="INSERT INTO User (id_user, name, email) VALUES (:number, 'mulan', 'mulan@gmail.com');";
-    private static final String MULAN_ROW_ID="SELECT * FROM User WHERE nickname = :nickname;";
+    private static final String TEST="INSERT INTO Users (id_user, name, email) VALUES (:number, 'mulan', 'mulan@gmail.com');";
+    private static final String MULAN_ROW_ID="SELECT * FROM Users WHERE nickname = :nickname;";
 
-    private static final String READ_ALL ="SELECT * FROM User";
+    private static final String READ_ALL ="SELECT * FROM Users";
 
-    private static final String READ_BY_ID ="SELECT * FROM User WHERE user_id = :user_id;";
+    private static final String READ_BY_ID ="SELECT * FROM Users WHERE user_id = :user_id;";
 
     @Override
     public void createMulan(){

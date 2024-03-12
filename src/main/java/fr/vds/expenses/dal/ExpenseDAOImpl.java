@@ -21,16 +21,16 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final static String READ_ALL_BY_USER="SELECT * FROM Expense WHERE owner_id = :owner_id";
+    private final static String READ_ALL_BY_USER="SELECT * FROM Groups WHERE owner_id = :owner_id";
 
-    private final static String READ_ALL="SELECT * FROM Expense WHERE expense_id = :expense_id";
+    private final static String READ_ALL="SELECT * FROM Groups WHERE id = :id";
 
-    private final static String CREATE_EXPENSE="INSERT INTO Expense (name, owner_id, description) VALUES\n" +
+    private final static String CREATE_EXPENSE="INSERT INTO Groups (name, owner_id, description) VALUES\n" +
             "    (:name, :owner_id, :description);";
 
-    private final static String UPDATE_BUDGET="UPDATE Expense SET budget_by_month = :budget_by_month WHERE expense_id = :expense_id";
+    private final static String UPDATE_BUDGET="UPDATE Groups SET budget_by_month = :budget_by_month WHERE id = :id";
 
-    private final static String DELETE_EXPENSE="DELETE FROM Expense WHERE expense_id = :expense_id";
+    private final static String DELETE_EXPENSE="DELETE FROM Groups WHERE id = :id";
 
     @Override
     public List<Expense> getExpensesByUser(int userId){
@@ -44,7 +44,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     @Override
     public Expense getExpensesById(int expenseId){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("expense_id", expenseId);
+        mapSqlParameterSource.addValue("id", expenseId);
 
         return namedParameterJdbcTemplate.queryForObject(READ_ALL, mapSqlParameterSource, new ExpenseRowMapper());
 
@@ -68,7 +68,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     public void updateBudgetExpense(int idExpense, int budget){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("budget_by_month", budget);
-        mapSqlParameterSource.addValue("expense_id", idExpense);
+        mapSqlParameterSource.addValue("id", idExpense);
 
         namedParameterJdbcTemplate.update(UPDATE_BUDGET, mapSqlParameterSource);
     }
@@ -76,7 +76,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     @Override
     public void deleteExpense(int idExpense){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("expense_id", idExpense);
+        mapSqlParameterSource.addValue("id", idExpense);
 
         namedParameterJdbcTemplate.update(DELETE_EXPENSE, mapSqlParameterSource);
     }
@@ -88,7 +88,7 @@ class ExpenseRowMapper implements RowMapper<Expense> {
     @Override
     public Expense mapRow(ResultSet rs, int rowNum) throws SQLException {
         Expense expense = new Expense();
-        expense.setIdExpense(rs.getInt("expense_id"));
+        expense.setIdExpense(rs.getInt("id"));
         expense.setExpenseName(rs.getString("name"));
         expense.setBalance(rs.getFloat("balance"));
         expense.setDescription(rs.getString("description"));
