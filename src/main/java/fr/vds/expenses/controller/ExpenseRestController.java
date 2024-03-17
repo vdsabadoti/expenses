@@ -6,10 +6,8 @@ import fr.vds.expenses.adaptations.LocalDateTimeTypeAdapter;
 import fr.vds.expenses.adaptations.LocalDateTypeAdapter;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import fr.vds.expenses.bo.Group;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -70,5 +68,14 @@ public class ExpenseRestController {
                 .create();
         return g.toJson(temporaryService.getLineFromExpense(idLine));
     }
+
+    @RequestMapping(method = RequestMethod.POST, path= "/creategroup")
+    public String createGroup(
+            @RequestBody Group group
+    ){
+        temporaryService.createGroup(group);
+        return "OK";
+    }
+ // http://localhost:8080/swagger-ui/index.html#/
 
 }

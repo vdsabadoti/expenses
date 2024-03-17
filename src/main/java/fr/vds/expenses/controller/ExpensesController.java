@@ -90,7 +90,7 @@ public class ExpensesController {
             Model model
     ) {
         newGroup.setOwner(user);
-        temporaryService.createExpense(newGroup);
+        temporaryService.createGroup(newGroup);
 
         //GET USERS FROM DATABASE
         List<User> lstUsers = participantService.getAllTheUsersFromDatabase();

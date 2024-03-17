@@ -18,7 +18,7 @@ public interface TemporaryService {
     //Create object Expense with Expense table and ParticipantsOfExpense as well (for the list
     //of participants
     
-    public void createExpense(Group newGroup);
+    public void createGroup(Group newGroup);
 
     void loadBudgetExpense(int idExpense);
 

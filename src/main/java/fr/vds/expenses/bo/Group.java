@@ -15,7 +15,7 @@ public class Group {
     private List<Participant> participantList = new ArrayList<Participant>();
     private List<Expense> expensesList = new ArrayList<Expense>();
 
-    public Group(float budgetByMonth, int id, float balance, String name, String description, User owner, List<Participant> participantList, List<Expense> expensesList) {
+    public Group(int id, float budgetByMonth, float balance, String name, String description, User owner, List<Participant> participantList, List<Expense> expensesList) {
         this.id = id;
         this.balance = balance;
         this.name = name;

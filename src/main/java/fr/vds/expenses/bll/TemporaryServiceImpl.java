@@ -75,8 +75,9 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
-	public void createExpense(Group newGroup) {
+	public void createGroup(Group newGroup) {
 		expenseDAO.createExpense(newGroup);
+		int id = newGroup.getId();
 	}
 
 	@Override
