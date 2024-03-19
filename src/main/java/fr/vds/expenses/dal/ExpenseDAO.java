@@ -9,7 +9,7 @@ public interface ExpenseDAO {
 
     Group getExpensesById(int expenseId);
 
-    void createExpense(Group group);
+    void createGroup(Group group);
 
     void updateBudgetExpense(int idExpense, int budget);
 

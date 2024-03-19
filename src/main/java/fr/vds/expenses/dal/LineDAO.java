@@ -8,4 +8,6 @@ public interface LineDAO {
     List<Expense> getAllLinesFromExpense(int idExpense);
 
     Expense getLineFromExpense(int idLine);
+
+    void createExpense(int groupId, Expense expense);
 }

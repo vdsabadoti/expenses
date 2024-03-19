@@ -50,9 +50,8 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
     }
 
-
     @Override
-    public void createExpense(Group group){
+    public void createGroup(Group group){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("name", group.getName());
         mapSqlParameterSource.addValue("owner_id", group.getOwner().getId());

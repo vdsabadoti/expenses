@@ -27,4 +27,6 @@ public interface TemporaryService {
     void deleteGroup(int groupId);
     //create line in table ParticipantsOfExpense
 
+    void createExpense(int groupId, Expense expense);
+
 }

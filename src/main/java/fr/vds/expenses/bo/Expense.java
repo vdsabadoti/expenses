@@ -96,7 +96,7 @@ public class Expense {
         return detailList;
     }
 
-    public void setLineDetailList(List<Detail> detailList) {
+    public void setDetailList(List<Detail> detailList) {
         this.detailList = detailList;
     }
 }

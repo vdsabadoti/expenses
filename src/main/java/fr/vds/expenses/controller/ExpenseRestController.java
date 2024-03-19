@@ -6,7 +6,9 @@ import fr.vds.expenses.adaptations.LocalDateTimeTypeAdapter;
 import fr.vds.expenses.adaptations.LocalDateTypeAdapter;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
+import fr.vds.expenses.bo.Expense;
 import fr.vds.expenses.bo.Group;
+import fr.vds.expenses.bo.CreateExpenseInterface;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -91,5 +93,17 @@ public class ExpenseRestController {
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
         return g.toJson(participantService.getAllTheParticipantsOfGroup(idGroup));
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path= "/createexpense")
+    public String createExpense(
+            @RequestBody CreateExpenseInterface createExpenseInterface
+    ){
+        this.temporaryService.createExpense(createExpenseInterface.getId(), createExpenseInterface.getExpense());
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson("OK");
     }
 }

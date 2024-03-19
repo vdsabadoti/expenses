@@ -66,7 +66,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 			//GET THE LINEDETAILS OF THE LINE FROM DB THANKS TO ID
 			List<Detail> detailsOfTheLine =  getDetails(expense.getId());
 			//POPULATE LINE WITH LINEDETAILS
-			expense.setLineDetailList(detailsOfTheLine);
+			expense.setDetailList(detailsOfTheLine);
 			//POPULATE THE LINES OF THE EXPENSE
 			group.getLineList().add(expense);
 		}
@@ -76,7 +76,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	@Override
 	public void createGroup(Group newGroup) {
-		expenseDAO.createExpense(newGroup);
+		expenseDAO.createGroup(newGroup);
 		int id = newGroup.getId();
 		for (Participant participant : newGroup.getParticipantList()) {
 			participant.setExpense(newGroup);
@@ -111,5 +111,19 @@ public class TemporaryServiceImpl implements TemporaryService {
 			participantService.deleteParticipant(participant.getId());
 		}
 		expenseDAO.deleteExpense(groupId);
+	}
+
+	@Transactional
+	@Override
+	public void createExpense(int groupId, Expense expense){
+		int id = groupId;
+		int id2 = expense.getId();
+
+		lineDAO.createExpense(groupId, expense);
+
+		for (Detail detail : expense.getLineDetailList()) {
+			refundAndDebtDAO.createDetail(detail, groupId, expense.getId());
+		}
+
 	}
 }
