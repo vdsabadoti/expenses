@@ -9,7 +9,7 @@ public class Participant {
     private float balance;
     private float budgetByMonth;
 
-    private Group group =  new Group();
+    private Group group;
 
     public Participant(int id) {
         this.id = id;

@@ -78,6 +78,10 @@ public class TemporaryServiceImpl implements TemporaryService {
 	public void createGroup(Group newGroup) {
 		expenseDAO.createExpense(newGroup);
 		int id = newGroup.getId();
+		for (Participant participant : newGroup.getParticipantList()) {
+			participant.setExpense(newGroup);
+			participantDAO.createPaticipant(participant);
+		}
 	}
 
 	@Override

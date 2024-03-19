@@ -67,8 +67,8 @@ public class User {
         return groupsList;
     }
 
-    public void setLstExpenses(List<Group> groupsList) {
-        this.groupsList = groupsList;
+    public void addGroup(Group groupsList) {
+        this.groupsList.add(groupsList);
     }
 
     public String getImage() {

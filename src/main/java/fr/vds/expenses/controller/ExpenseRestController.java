@@ -74,7 +74,11 @@ public class ExpenseRestController {
             @RequestBody Group group
     ){
         temporaryService.createGroup(group);
-        return "OK";
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson("OK");
     }
  // http://localhost:8080/swagger-ui/index.html#/
 
