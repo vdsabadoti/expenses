@@ -31,7 +31,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
 	@Override
-	public void createParticipantInExpense(Participant participant, int idExpense) {
+	public void createParticipantInGroup(Participant participant, int idExpense) {
 		if (!userIsAlreadyParticipant(idExpense, participant.getUser().getId())){
 			participant.getExpense().setId(idExpense);
 			participantDAO.createPaticipant(participant);
@@ -45,8 +45,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 
 	@Override
-	public List<Participant> getAllTheParticipantsOfExpense(int idExpense){
-		List<Participant> participants = participantDAO.getAllTheParticipantsOfTheExpense(idExpense);
+	public List<Participant> getAllTheParticipantsOfGroup(int groupId){
+		List<Participant> participants = participantDAO.getAllTheParticipantsOfTheExpense(groupId);
 		for (Participant participant : participants){
 			User user = getUserFromDataBase(participant.getUser().getId());
 			participant.setUser(user);

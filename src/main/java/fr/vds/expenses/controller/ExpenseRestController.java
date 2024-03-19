@@ -32,7 +32,7 @@ public class ExpenseRestController {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getExpensesFromUser(idUser));
+        return g.toJson(temporaryService.getGroupsFromUser(idUser));
 
     }
 
@@ -44,7 +44,7 @@ public class ExpenseRestController {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getSingleExpense(idExpense));
+        return g.toJson(temporaryService.getGroupById(idExpense));
     }
 
     @RequestMapping(method = RequestMethod.GET, path= "/getlinedetail")
@@ -55,7 +55,7 @@ public class ExpenseRestController {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getLineDetailByLineExpenseId(idLine));
+        return g.toJson(temporaryService.getDetails(idLine));
     }
 
     @RequestMapping(method = RequestMethod.GET, path= "/getline")
@@ -66,7 +66,7 @@ public class ExpenseRestController {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getLineFromExpense(idLine));
+        return g.toJson(temporaryService.getExpenseById(idLine));
     }
 
     @RequestMapping(method = RequestMethod.POST, path= "/creategroup")
@@ -82,4 +82,14 @@ public class ExpenseRestController {
     }
  // http://localhost:8080/swagger-ui/index.html#/
 
+    @RequestMapping(method = RequestMethod.GET, path = "/getparticipants")
+    public String getParticipantsOfGroup(
+            @RequestParam(name = "groupid") int idGroup
+    ) {
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson(participantService.getAllTheParticipantsOfGroup(idGroup));
+    }
 }

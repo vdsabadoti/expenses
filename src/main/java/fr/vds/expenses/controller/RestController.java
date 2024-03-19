@@ -43,7 +43,7 @@ public class RestController {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getSingleExpense(3));
+        return g.toJson(temporaryService.getGroupById(3));
     }
 
 }

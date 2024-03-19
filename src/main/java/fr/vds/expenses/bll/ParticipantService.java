@@ -14,11 +14,11 @@ public interface ParticipantService {
 
     public User getUserFromDataBase(int idUser);
     
-    public void createParticipantInExpense(Participant participant, int idExpense);
+    public void createParticipantInGroup(Participant participant, int idExpense);
 
     List<User> getAllTheUsersFromDatabase();
 
-    List<Participant> getAllTheParticipantsOfExpense(int idExpense);
+    List<Participant> getAllTheParticipantsOfGroup(int groupId);
 
     void deleteParticipant(int idParticipant);
 }

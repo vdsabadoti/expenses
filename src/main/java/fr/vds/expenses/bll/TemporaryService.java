@@ -10,21 +10,21 @@ public interface TemporaryService {
     //public void createNewLine(?);
 
     //public void modifyLine(?);
-    public List<Group> getExpensesFromUser(int idUser);
+    public List<Group> getGroupsFromUser(int userId);
 
-    Expense getLineFromExpense(int idLine);
+    Expense getExpenseById(int expenseId);
 
-    public Group getSingleExpense(int ifExpense);
+    public Group getGroupById(int groupId);
     //Create object Expense with Expense table and ParticipantsOfExpense as well (for the list
     //of participants
     
     public void createGroup(Group newGroup);
 
-    void loadBudgetExpense(int idExpense);
+    void loadBudgetGroup(int groupId);
 
-    List<Detail> getLineDetailByLineExpenseId(int lineExpenseId);
+    List<Detail> getDetails(int expenseId);
 
-    void deleteExpense(int idExpense);
+    void deleteGroup(int groupId);
     //create line in table ParticipantsOfExpense
 
 }

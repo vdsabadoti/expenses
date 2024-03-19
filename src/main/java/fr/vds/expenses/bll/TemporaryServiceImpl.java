@@ -29,42 +29,42 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
-	public List<Group> getExpensesFromUser(int idUser) {
-		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(idUser);
+	public List<Group> getGroupsFromUser(int userId) {
+		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(userId);
 		List<Group> expensesLst = new ArrayList<>();
 
 		for (Participant participants : participantsByUserId) {
 			//FIND EXPENSE THANKS TO USER ID (THE USER IS THE PARTICIPANT)
 			int expenseId = participants.getExpense().getId();
-			Group group = getSingleExpense(expenseId);
+			Group group = getGroupById(expenseId);
 			expensesLst.add(group);
 		}
 		return expensesLst;
 	}
 
 	@Override
-	public Expense getLineFromExpense(int idLine){
-		Expense expense = lineDAO.getLineFromExpense(idLine);
+	public Expense getExpenseById(int expenseId){
+		Expense expense = lineDAO.getLineFromExpense(expenseId);
 		User user = this.userDAO.readUserById(expense.getPayor().getId());
 		expense.setPayor(user);
 		return expense;
 	}
 	@Override
-	public Group getSingleExpense(int idExpense) {
+	public Group getGroupById(int groupId) {
 		//GET EXPENSE FROM DB
-		Group group = expenseDAO.getExpensesById(idExpense);
+		Group group = expenseDAO.getExpensesById(groupId);
 		//GET THE PARTICIPANTS OF THE EXPENSE FROM DB THANKS TO ID
-		List<Participant> allTheParticipantsOfTheExpense = participantService.getAllTheParticipantsOfExpense(idExpense);
+		List<Participant> allTheParticipantsOfTheExpense = participantService.getAllTheParticipantsOfGroup(groupId);
 		//POPULATE THE PARTICIPANTS OF THE EXPENSE
 		for (Participant participantOfTheExpense : allTheParticipantsOfTheExpense) {
 			group.addParticipantToList(participantOfTheExpense);
 		}
 		//GET THE LINES OF THE EXPENSE FROM DB THANKS TO ID
-		List<Expense> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(idExpense);
+		List<Expense> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(groupId);
 		//FOR EACH LINE, GET THE LINE DETAILS FROM DB THANKS TO ID
 		for (Expense expense : allTheLinesOfTheExpense) {
 			//GET THE LINEDETAILS OF THE LINE FROM DB THANKS TO ID
-			List<Detail> detailsOfTheLine =  getLineDetailByLineExpenseId(expense.getId());
+			List<Detail> detailsOfTheLine =  getDetails(expense.getId());
 			//POPULATE LINE WITH LINEDETAILS
 			expense.setLineDetailList(detailsOfTheLine);
 			//POPULATE THE LINES OF THE EXPENSE
@@ -85,18 +85,18 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
-	public void loadBudgetExpense(int idExpense) {
-		List<Participant> lstParticipants = participantService.getAllTheParticipantsOfExpense(idExpense);
+	public void loadBudgetGroup(int groupId) {
+		List<Participant> lstParticipants = participantService.getAllTheParticipantsOfGroup(groupId);
 		int budget = 0;
 		for (Participant participant : lstParticipants) {
 			budget += participant.getBudgetByMonth();
 		}
-		expenseDAO.updateBudgetExpense(idExpense, budget);
+		expenseDAO.updateBudgetExpense(groupId, budget);
 	}
 
 	@Override
-	public List<Detail> getLineDetailByLineExpenseId(int lineExpenseId){
-		List<Detail> details = this.refundAndDebtDAO.getLineDetailByLineId(lineExpenseId);
+	public List<Detail> getDetails(int expenseId){
+		List<Detail> details = this.refundAndDebtDAO.getLineDetailByLineId(expenseId);
 		for (Detail line : details) {
 			line.setUser(this.userDAO.readUserById(line.getUser().getId()));
 		}
@@ -105,11 +105,11 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	@Transactional
 	@Override
-	public void deleteExpense(int idExpense) {
-		List<Participant> participants = participantService.getAllTheParticipantsOfExpense(idExpense);
+	public void deleteGroup(int groupId) {
+		List<Participant> participants = participantService.getAllTheParticipantsOfGroup(groupId);
 		for (Participant participant : participants) {
 			participantService.deleteParticipant(participant.getId());
 		}
-		expenseDAO.deleteExpense(idExpense);
+		expenseDAO.deleteExpense(groupId);
 	}
 }

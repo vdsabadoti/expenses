@@ -44,7 +44,7 @@ public class ExpensesController {
             @RequestParam(name = "id") int idExpense,
             Model model
     ) {
-        Group group = temporaryService.getSingleExpense(idExpense);
+        Group group = temporaryService.getGroupById(idExpense);
         model.addAttribute("expense", group);
         return "view-detail-expenses";
     }
@@ -94,7 +94,7 @@ public class ExpensesController {
 
         //GET USERS FROM DATABASE
         List<User> lstUsers = participantService.getAllTheUsersFromDatabase();
-        List<Participant> participants = participantService.getAllTheParticipantsOfExpense(newGroup.getId());
+        List<Participant> participants = participantService.getAllTheParticipantsOfGroup(newGroup.getId());
 
         Participant newParticipant = new Participant();
 
@@ -126,11 +126,11 @@ public class ExpensesController {
             @ModelAttribute("participant") Participant participant,
             Model model
     ) {
-        participantService.createParticipantInExpense(participant, idExpense);
-        Group groupUpdated = temporaryService.getSingleExpense(idExpense);
+        participantService.createParticipantInGroup(participant, idExpense);
+        Group groupUpdated = temporaryService.getGroupById(idExpense);
 
         List<User> lstUsers = participantService.getAllTheUsersFromDatabase();
-        List<Participant> participants = participantService.getAllTheParticipantsOfExpense(idExpense);
+        List<Participant> participants = participantService.getAllTheParticipantsOfGroup(idExpense);
 
         Participant newParticipant = new Participant();
         model.addAttribute("expense", groupUpdated);
@@ -155,7 +155,7 @@ public class ExpensesController {
             @RequestParam(name = "key") int idExpense,
             Model model
     ) {
-        temporaryService.loadBudgetExpense(idExpense);
+        temporaryService.loadBudgetGroup(idExpense);
         return "redirect:/expenses";
     }
 
@@ -168,7 +168,7 @@ public class ExpensesController {
             @RequestParam(name = "id") int idExpense,
             Model model
     ) {
-        temporaryService.deleteExpense(idExpense);
+        temporaryService.deleteGroup(idExpense);
         return "redirect:/expenses";
     }
 
@@ -183,7 +183,7 @@ public class ExpensesController {
             @SessionAttribute("user") User user,
             Model model
     ) {
-        List<Group> groupListOfUser = temporaryService.getExpensesFromUser(user.getId());
+        List<Group> groupListOfUser = temporaryService.getGroupsFromUser(user.getId());
         model.addAttribute("user", user);
         model.addAttribute("expenses", groupListOfUser);
         return "view-expenses";
