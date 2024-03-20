@@ -106,4 +106,16 @@ public class ExpenseRestController {
                 .create();
         return g.toJson("OK");
     }
+
+    @RequestMapping(method = RequestMethod.POST, path= "/updateexpense")
+    public String updateExpense(
+            @RequestBody CreateExpenseInterface createExpenseInterface
+    ){
+        this.temporaryService.updateExpense(createExpenseInterface.getId(), createExpenseInterface.getExpense());
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson("OK");
+    }
 }

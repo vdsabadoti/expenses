@@ -126,4 +126,32 @@ public class TemporaryServiceImpl implements TemporaryService {
 		}
 
 	}
+
+	@Transactional
+	@Override
+	public void updateExpense(int groupId, Expense expense){
+		int id = groupId;
+		int id2 = expense.getId();
+
+		//1- delete details
+
+		//2- delete expense
+		//3- create new expense
+		//lineDAO.createExpense(groupId, expense);
+
+		//4- create details
+		//for (Detail detail : expense.getLineDetailList()) {
+		//	refundAndDebtDAO.createDetail(detail, groupId, expense.getId());
+		//}
+
+	}
+
+	private void findExpenseAndDelete(){
+
+	}
+
+	private void findDetailAndDelete(){
+
+	}
+
 }

@@ -1,6 +1,7 @@
 package fr.vds.expenses.bll;
 
 import fr.vds.expenses.bo.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface TemporaryService {
 
     void createExpense(int groupId, Expense expense);
 
+    @Transactional
+    void updateExpense(int groupId, Expense expense);
 }
