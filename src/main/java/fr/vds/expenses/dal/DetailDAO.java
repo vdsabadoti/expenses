@@ -9,4 +9,6 @@ public interface DetailDAO {
     List<Detail> getLineDetailByLineId(int idExpenseLine);
 
     void createDetail(Detail detail, int groupId, int expenseId);
+
+    void deleteDetail(Detail detail);
 }

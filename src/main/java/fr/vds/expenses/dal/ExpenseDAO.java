@@ -10,4 +10,6 @@ public interface ExpenseDAO {
     Expense getLineFromExpense(int idLine);
 
     void createExpense(int groupId, Expense expense);
+
+    void deleteExpense(int expenseId);
 }

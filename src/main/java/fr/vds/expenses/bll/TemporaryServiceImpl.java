@@ -116,8 +116,6 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Transactional
 	@Override
 	public void createExpense(int groupId, Expense expense){
-		int id = groupId;
-		int id2 = expense.getId();
 
 		expenseDAO.createExpense(groupId, expense);
 
@@ -133,25 +131,30 @@ public class TemporaryServiceImpl implements TemporaryService {
 		int id = groupId;
 		int id2 = expense.getId();
 
-		//1- delete details
+		//1 - Delete details
+		//2 - Delete expense
+		for (Detail detail : expense.getLineDetailList()) {
+			detailDAO.deleteDetail(detail);
+		}
+		expenseDAO.deleteExpense(expense.getId());
 
-		//2- delete expense
 		//3- create new expense
-		//lineDAO.createExpense(groupId, expense);
-
 		//4- create details
-		//for (Detail detail : expense.getLineDetailList()) {
-		//	refundAndDebtDAO.createDetail(detail, groupId, expense.getId());
-		//}
-
+		this.createExpense(groupId, expense);
 	}
 
-	private void findExpenseAndDelete(){
+	@Transactional
+	@Override
+	public void deleteExpense(int expenseId){
 
+		int goru = expenseId;
+
+		List<Detail> details = this.detailDAO.getLineDetailByLineId(expenseId);
+		for (Detail detail : details){
+			detailDAO.deleteDetail(detail);
+		}
+		expenseDAO.deleteExpense(expenseId);
 	}
 
-	private void findDetailAndDelete(){
-
-	}
 
 }

@@ -19,12 +19,9 @@ public class DetailDAOImpl implements DetailDAO {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    private static final String SELECT_DETAIL_LINE_BY_LINE_group_id =
-            "SELECT * FROM Details WHERE expense_id =:expense_id";
-
+    private static final String SELECT_DETAIL_LINE_BY_LINE_group_id = "SELECT * FROM Details WHERE expense_id =:expense_id";
     private static final String CREATE_DETAIL = "insert into Details (expense_id, group_id, value, user_id) values (:expense_id, :group_id, :value, :user_id)";
-
+    private static final String DELETE = "DELETE FROM Details WHERE id = :id";
 
     @Override
     public List<Detail> getLineDetailByLineId(int idExpenseLine) {
@@ -49,6 +46,14 @@ public class DetailDAOImpl implements DetailDAO {
     }
 
 
+    @Override
+    public void deleteDetail(Detail detail){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", detail.getId());
+
+        namedParameterJdbcTemplate.update(DELETE, mapSqlParameterSource);
+
+    }
 
 
 }

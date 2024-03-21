@@ -28,7 +28,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
             "SELECT * FROM Expenses WHERE id =:id";
 
     private static final String CREATE_EXPENSE = "insert into Expenses (group_id, label, value, payor_id, debt_or_refund, date) values (:group_id, :label, :value, :payor_id, :debt_or_refund, :date)";
-
+    private static final String DELETE = "DELETE FROM Expenses WHERE id = :id";
 
     @Override
     public List<Expense> getAllLinesFromExpense(int idExpense){
@@ -60,6 +60,15 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         namedParameterJdbcTemplate.update(CREATE_EXPENSE, mapSqlParameterSource, keyHolder);
 
         expense.setId((Integer) keyHolder.getKey());
+    }
+
+    @Override
+    public void deleteExpense(int expenseId){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", expenseId);
+
+        namedParameterJdbcTemplate.update(DELETE, mapSqlParameterSource);
+
     }
 
 }

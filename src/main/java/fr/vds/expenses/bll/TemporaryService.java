@@ -32,4 +32,7 @@ public interface TemporaryService {
 
     @Transactional
     void updateExpense(int groupId, Expense expense);
+
+    @Transactional
+    void deleteExpense(int expenseId);
 }
