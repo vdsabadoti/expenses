@@ -1,17 +1,13 @@
 package fr.vds.expenses.dal;
 
-import fr.vds.expenses.bo.Group;
+import fr.vds.expenses.bo.Expense;
 
 import java.util.List;
 
 public interface ExpenseDAO {
-    List<Group> getExpensesByUser(int userId);
+    List<Expense> getAllLinesFromExpense(int idExpense);
 
-    Group getExpensesById(int expenseId);
+    Expense getLineFromExpense(int idLine);
 
-    void createGroup(Group group);
-
-    void updateBudgetExpense(int idExpense, int budget);
-
-    void deleteExpense(int idExpense);
+    void createExpense(int groupId, Expense expense);
 }

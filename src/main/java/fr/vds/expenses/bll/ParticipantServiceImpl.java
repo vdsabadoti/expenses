@@ -2,8 +2,8 @@ package fr.vds.expenses.bll;
 
 import fr.vds.expenses.bo.Participant;
 import fr.vds.expenses.bo.User;
+import fr.vds.expenses.dal.GroupDAO;
 import fr.vds.expenses.dal.ExpenseDAO;
-import fr.vds.expenses.dal.LineDAO;
 import fr.vds.expenses.dal.ParticipantDAO;
 import fr.vds.expenses.dal.UserDAO;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import java.util.List;
 public class ParticipantServiceImpl implements ParticipantService {
 
 	private UserDAO userDAO;
-	private ExpenseDAO expenseDAO;
+	private GroupDAO groupDAO;
 	private ParticipantDAO participantDAO;
-	private LineDAO lineDAO;
+	private ExpenseDAO expenseDAO;
 
-	public ParticipantServiceImpl(LineDAO lineDAO, UserDAO userDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
-		this.lineDAO = lineDAO;
-		this.userDAO = userDAO;
+	public ParticipantServiceImpl(ExpenseDAO expenseDAO, UserDAO userDAO, GroupDAO groupDAO, ParticipantDAO participantDAO) {
 		this.expenseDAO = expenseDAO;
+		this.userDAO = userDAO;
+		this.groupDAO = groupDAO;
 		this.participantDAO = participantDAO;
 	}
 

@@ -1,11 +1,10 @@
 package fr.vds.expenses.dal;
 
 import fr.vds.expenses.bo.Detail;
-import fr.vds.expenses.bo.Group;
 
 import java.util.List;
 
-public interface RefundAndDebtDAO {
+public interface DetailDAO {
 
     List<Detail> getLineDetailByLineId(int idExpenseLine);
 

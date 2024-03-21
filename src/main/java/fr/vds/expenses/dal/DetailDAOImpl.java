@@ -1,7 +1,6 @@
 package fr.vds.expenses.dal;
 
 import fr.vds.expenses.bo.Detail;
-import fr.vds.expenses.bo.Group;
 import fr.vds.expenses.bo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
+public class DetailDAOImpl implements DetailDAO {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -32,7 +31,7 @@ public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("expense_id", idExpenseLine);
 
-        return namedParameterJdbcTemplate.query(SELECT_DETAIL_LINE_BY_LINE_group_id, mapSqlParameterSource, new LineDetailRowMapper());
+        return namedParameterJdbcTemplate.query(SELECT_DETAIL_LINE_BY_LINE_group_id, mapSqlParameterSource, new DetailRowMapper());
     }
 
     @Override
@@ -53,7 +52,7 @@ public class RefundAndDebtDAOImpl implements RefundAndDebtDAO {
 
 
 }
-    class LineDetailRowMapper implements RowMapper<Detail> {
+    class DetailRowMapper implements RowMapper<Detail> {
 
         @Override
         public Detail mapRow(ResultSet rs, int rowNum) throws SQLException {

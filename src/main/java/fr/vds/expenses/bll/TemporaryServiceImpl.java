@@ -11,20 +11,20 @@ import java.util.List;
 @Service
 public class TemporaryServiceImpl implements TemporaryService {
 
-	private ExpenseDAO expenseDAO;
+	private GroupDAO groupDAO;
 	private ParticipantDAO participantDAO;
-	private LineDAO lineDAO;
-	private RefundAndDebtDAO refundAndDebtDAO;
+	private ExpenseDAO expenseDAO;
+	private DetailDAO detailDAO;
 	private UserDAO userDAO;
 
 	private ParticipantService participantService;
 
-	public TemporaryServiceImpl(UserDAO userDAO, RefundAndDebtDAO refundAndDebtDAO, ParticipantService participantService, LineDAO lineDAO, ExpenseDAO expenseDAO, ParticipantDAO participantDAO) {
-		this.lineDAO = lineDAO;
+	public TemporaryServiceImpl(UserDAO userDAO, DetailDAO detailDAO, ParticipantService participantService, ExpenseDAO expenseDAO, GroupDAO groupDAO, ParticipantDAO participantDAO) {
 		this.expenseDAO = expenseDAO;
+		this.groupDAO = groupDAO;
 		this.participantDAO = participantDAO;
 		this.participantService = participantService;
-		this.refundAndDebtDAO = refundAndDebtDAO;
+		this.detailDAO = detailDAO;
 		this.userDAO = userDAO;
 	}
 
@@ -44,7 +44,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	@Override
 	public Expense getExpenseById(int expenseId){
-		Expense expense = lineDAO.getLineFromExpense(expenseId);
+		Expense expense = expenseDAO.getLineFromExpense(expenseId);
 		User user = this.userDAO.readUserById(expense.getPayor().getId());
 		expense.setPayor(user);
 		return expense;
@@ -52,7 +52,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Override
 	public Group getGroupById(int groupId) {
 		//GET EXPENSE FROM DB
-		Group group = expenseDAO.getExpensesById(groupId);
+		Group group = groupDAO.getExpensesById(groupId);
 		//GET THE PARTICIPANTS OF THE EXPENSE FROM DB THANKS TO ID
 		List<Participant> allTheParticipantsOfTheExpense = participantService.getAllTheParticipantsOfGroup(groupId);
 		//POPULATE THE PARTICIPANTS OF THE EXPENSE
@@ -60,7 +60,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 			group.addParticipantToList(participantOfTheExpense);
 		}
 		//GET THE LINES OF THE EXPENSE FROM DB THANKS TO ID
-		List<Expense> allTheLinesOfTheExpense = lineDAO.getAllLinesFromExpense(groupId);
+		List<Expense> allTheLinesOfTheExpense = expenseDAO.getAllLinesFromExpense(groupId);
 		//FOR EACH LINE, GET THE LINE DETAILS FROM DB THANKS TO ID
 		for (Expense expense : allTheLinesOfTheExpense) {
 			//GET THE LINEDETAILS OF THE LINE FROM DB THANKS TO ID
@@ -76,7 +76,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	@Override
 	public void createGroup(Group newGroup) {
-		expenseDAO.createGroup(newGroup);
+		groupDAO.createGroup(newGroup);
 		int id = newGroup.getId();
 		for (Participant participant : newGroup.getParticipantList()) {
 			participant.setExpense(newGroup);
@@ -91,12 +91,12 @@ public class TemporaryServiceImpl implements TemporaryService {
 		for (Participant participant : lstParticipants) {
 			budget += participant.getBudgetByMonth();
 		}
-		expenseDAO.updateBudgetExpense(groupId, budget);
+		groupDAO.updateBudgetExpense(groupId, budget);
 	}
 
 	@Override
 	public List<Detail> getDetails(int expenseId){
-		List<Detail> details = this.refundAndDebtDAO.getLineDetailByLineId(expenseId);
+		List<Detail> details = this.detailDAO.getLineDetailByLineId(expenseId);
 		for (Detail line : details) {
 			line.setUser(this.userDAO.readUserById(line.getUser().getId()));
 		}
@@ -110,7 +110,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 		for (Participant participant : participants) {
 			participantService.deleteParticipant(participant.getId());
 		}
-		expenseDAO.deleteExpense(groupId);
+		groupDAO.deleteExpense(groupId);
 	}
 
 	@Transactional
@@ -119,10 +119,10 @@ public class TemporaryServiceImpl implements TemporaryService {
 		int id = groupId;
 		int id2 = expense.getId();
 
-		lineDAO.createExpense(groupId, expense);
+		expenseDAO.createExpense(groupId, expense);
 
 		for (Detail detail : expense.getLineDetailList()) {
-			refundAndDebtDAO.createDetail(detail, groupId, expense.getId());
+			detailDAO.createDetail(detail, groupId, expense.getId());
 		}
 
 	}
