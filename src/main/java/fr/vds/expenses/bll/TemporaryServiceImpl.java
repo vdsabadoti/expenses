@@ -128,19 +128,10 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Transactional
 	@Override
 	public void updateExpense(int groupId, Expense expense){
-		int id = groupId;
-		int id2 = expense.getId();
-
-		//1 - Delete details
-		//2 - Delete expense
 		for (Detail detail : expense.getLineDetailList()) {
-			detailDAO.deleteDetail(detail);
+			detailDAO.updateDetail(detail, expense.getId(), groupId);
 		}
-		expenseDAO.deleteExpense(expense.getId());
-
-		//3- create new expense
-		//4- create details
-		this.createExpense(groupId, expense);
+		expenseDAO.updateExpense(expense, groupId);
 	}
 
 	@Transactional

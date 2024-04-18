@@ -30,6 +30,8 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     private static final String CREATE_EXPENSE = "insert into Expenses (group_id, label, value, payor_id, debt_or_refund, date) values (:group_id, :label, :value, :payor_id, :debt_or_refund, :date)";
     private static final String DELETE = "DELETE FROM Expenses WHERE id = :id";
 
+    private static final String UPDATE = "UPDATE Expenses SET value = :value, group_id = :group_id, label = :label, payor_id = :payor_id, debt_or_refund = :debt_or_refund, date = :date WHERE id = :id";
+
     @Override
     public List<Expense> getAllLinesFromExpense(int idExpense){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
@@ -68,6 +70,21 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         mapSqlParameterSource.addValue("id", expenseId);
 
         namedParameterJdbcTemplate.update(DELETE, mapSqlParameterSource);
+
+    }
+
+    @Override
+    public void updateExpense(Expense expense, int groupId){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("group_id", groupId);
+        mapSqlParameterSource.addValue("id", expense.getId());
+        mapSqlParameterSource.addValue("label", expense.getLabel());
+        mapSqlParameterSource.addValue("value", expense.getValue());
+        mapSqlParameterSource.addValue("payor_id", expense.getPayor().getId());
+        mapSqlParameterSource.addValue("debt_or_refund", expense.getDebtOrRefund());
+        mapSqlParameterSource.addValue("date", expense.getDate());
+
+        namedParameterJdbcTemplate.update(UPDATE, mapSqlParameterSource);
 
     }
 

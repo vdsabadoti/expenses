@@ -11,4 +11,6 @@ public interface DetailDAO {
     void createDetail(Detail detail, int groupId, int expenseId);
 
     void deleteDetail(Detail detail);
+
+    void updateDetail(Detail detail, int expenseId, int groupId);
 }

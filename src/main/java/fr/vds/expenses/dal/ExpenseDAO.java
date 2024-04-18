@@ -12,4 +12,6 @@ public interface ExpenseDAO {
     void createExpense(int groupId, Expense expense);
 
     void deleteExpense(int expenseId);
+
+    void updateExpense(Expense expense, int groupId);
 }
