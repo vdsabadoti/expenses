@@ -21,6 +21,8 @@ public interface TemporaryService {
     
     public void createGroup(Group newGroup);
 
+    void updateGroup(Group group);
+
     void loadBudgetGroup(int groupId);
 
     List<Detail> getDetails(int expenseId);

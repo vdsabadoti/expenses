@@ -28,6 +28,8 @@ public class GroupDAOImpl implements GroupDAO {
     private final static String CREATE_EXPENSE="INSERT INTO Groups (name, owner_id, description) VALUES\n" +
             "    (:name, :owner_id, :description);";
 
+    private final static String UPDATE_GROUP="UPDATE Groups SET name = :name, description = :description WHERE id = :id";
+
     private final static String UPDATE_BUDGET="UPDATE Groups SET budget_by_month = :budget_by_month WHERE id = :id";
 
     private final static String DELETE_EXPENSE="DELETE FROM Groups WHERE id = :id";
@@ -61,6 +63,16 @@ public class GroupDAOImpl implements GroupDAO {
         namedParameterJdbcTemplate.update(CREATE_EXPENSE, mapSqlParameterSource, keyHolder);
 
         group.setId((Integer) keyHolder.getKey());
+    }
+
+    @Override
+    public void updateGroup(Group group){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("name", group.getName());
+        mapSqlParameterSource.addValue("description", group.getDescription());
+        mapSqlParameterSource.addValue("id", group.getId());
+
+        namedParameterJdbcTemplate.update(UPDATE_GROUP, mapSqlParameterSource);
     }
 
     @Override

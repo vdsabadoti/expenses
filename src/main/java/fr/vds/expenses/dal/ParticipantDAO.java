@@ -13,6 +13,8 @@ public interface ParticipantDAO {
 
     void createPaticipant(Participant participant);
 
+    void updateParticipant(Participant participant);
+
     void deleteParticipant(int idParticipant);
 
     int countParticipantsByUserId(int idIUser, int idExpense);

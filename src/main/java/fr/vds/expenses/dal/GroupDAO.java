@@ -11,6 +11,8 @@ public interface GroupDAO {
 
     void createGroup(Group group);
 
+    void updateGroup(Group group);
+
     void updateBudgetExpense(int idExpense, int budget);
 
     void deleteExpense(int idExpense);

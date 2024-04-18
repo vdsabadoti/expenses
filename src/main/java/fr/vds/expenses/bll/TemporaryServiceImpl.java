@@ -85,6 +85,15 @@ public class TemporaryServiceImpl implements TemporaryService {
 	}
 
 	@Override
+	public void updateGroup(Group group){
+		groupDAO.updateGroup(group);
+		for (Participant participant : group.getParticipantList()) {
+			participant.setExpense(group);
+			participantDAO.updateParticipant(participant);
+		}
+	}
+
+	@Override
 	public void loadBudgetGroup(int groupId) {
 		List<Participant> lstParticipants = participantService.getAllTheParticipantsOfGroup(groupId);
 		int budget = 0;

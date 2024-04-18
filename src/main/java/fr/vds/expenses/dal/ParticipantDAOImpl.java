@@ -30,6 +30,8 @@ public class ParticipantDAOImpl implements ParticipantDAO {
 
     private final static String DELETE_PARTICIPANT="DELETE FROM Participants WHERE id = :id";
 
+    private final static String UPDATE_PARTICIPANT="UPDATE Participants SET budget_by_month = :budget_by_month WHERE id = :id";
+
     private static final String COUNT_PARTICIPANTS_FROM_EXPENSE_BY_USER_ID="SELECT COUNT(*) FROM Participants WHERE user_id = :user_id AND group_id = :group_id";
     @Override
     public List<Participant> readParticipantsByUserId(int userId){
@@ -69,6 +71,16 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         namedParameterJdbcTemplate.update(CREATE_PARTICIPANT, mapSqlParameterSource, keyHolder);
 
         participant.setId((Integer) keyHolder.getKey());
+
+    }
+
+    @Override
+    public void updateParticipant(Participant participant){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("budget_by_month", participant.getBudgetByMonth());
+        mapSqlParameterSource.addValue("id", participant.getId());
+
+        namedParameterJdbcTemplate.update(UPDATE_PARTICIPANT, mapSqlParameterSource);
 
     }
 

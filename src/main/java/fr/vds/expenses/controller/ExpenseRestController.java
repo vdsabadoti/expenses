@@ -81,6 +81,18 @@ public class ExpenseRestController {
                 .create();
         return g.toJson("OK");
     }
+
+    @RequestMapping(method = RequestMethod.POST, path= "/updategroup")
+    public String updateGroup(
+            @RequestBody Group group
+    ){
+        temporaryService.updateGroup(group);
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson("OK");
+    }
  // http://localhost:8080/swagger-ui/index.html#/
 
     @RequestMapping(method = RequestMethod.GET, path = "/getparticipants")
