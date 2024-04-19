@@ -1,3 +1,3 @@
-## Group Expenses
+# Expenses
 
 Back end of Group Expenses application. 
