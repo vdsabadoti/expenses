@@ -116,7 +116,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Override
 	public void deleteGroup(int groupId) {
 
-		//TODO only the owner is authorized to delete its own group
+		//TODO only the owner is authorized to delete its own group -> throw exception
 
 		List<Participant> participants = participantService.getAllTheParticipantsOfGroup(groupId);
 		for (Participant participant : participants) {

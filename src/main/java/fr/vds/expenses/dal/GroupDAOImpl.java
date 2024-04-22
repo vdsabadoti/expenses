@@ -2,6 +2,7 @@ package fr.vds.expenses.dal;
 
 import fr.vds.expenses.bo.Group;
 import fr.vds.expenses.bo.Participant;
+import fr.vds.expenses.bo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -104,6 +105,7 @@ class GroupRowMapper implements RowMapper<Group> {
         group.setBalance(rs.getFloat("balance"));
         group.setDescription(rs.getString("description"));
         group.setBudgetByMonth(rs.getFloat("budget_by_month"));
+        group.setOwner(new User(rs.getInt("owner_id")));
         group.setParticipantList(new ArrayList<Participant>());
         return group;
     }
