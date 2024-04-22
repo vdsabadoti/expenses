@@ -134,7 +134,6 @@ public class ExpenseRestController {
     public String deleteExpense(
             @RequestParam(name = "id") int expenseId
     ){
-        int idFromURL = expenseId;
         this.temporaryService.deleteExpense(expenseId);
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -142,4 +141,17 @@ public class ExpenseRestController {
                 .create();
         return g.toJson("OK");
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, path= "/deletegroup")
+    public String deleteGroup(
+            @RequestParam(name = "id") int groupId
+    ){
+        this.temporaryService.deleteGroup(groupId);
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+        return g.toJson("OK");
+    }
+
 }

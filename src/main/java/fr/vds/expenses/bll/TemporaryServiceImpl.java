@@ -115,9 +115,20 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Transactional
 	@Override
 	public void deleteGroup(int groupId) {
+
+		//TODO only the owner is authorized to delete its own group
+
 		List<Participant> participants = participantService.getAllTheParticipantsOfGroup(groupId);
 		for (Participant participant : participants) {
 			participantService.deleteParticipant(participant.getId());
+		}
+		List<Expense> expenses = expenseDAO.getAllLinesFromExpense(groupId);
+		for (Expense expense : expenses){
+			List<Detail> details = this.detailDAO.getLineDetailByLineId(expense.getId());
+			for (Detail detail : details){
+				detailDAO.deleteDetail(detail);
+			}
+			expenseDAO.deleteExpense(expense.getId());
 		}
 		groupDAO.deleteExpense(groupId);
 	}
@@ -125,9 +136,7 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Transactional
 	@Override
 	public void createExpense(int groupId, Expense expense){
-
 		expenseDAO.createExpense(groupId, expense);
-
 		for (Detail detail : expense.getLineDetailList()) {
 			detailDAO.createDetail(detail, groupId, expense.getId());
 		}
@@ -146,9 +155,6 @@ public class TemporaryServiceImpl implements TemporaryService {
 	@Transactional
 	@Override
 	public void deleteExpense(int expenseId){
-
-		int goru = expenseId;
-
 		List<Detail> details = this.detailDAO.getLineDetailByLineId(expenseId);
 		for (Detail detail : details){
 			detailDAO.deleteDetail(detail);

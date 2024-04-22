@@ -32,7 +32,7 @@ public class GroupDAOImpl implements GroupDAO {
 
     private final static String UPDATE_BUDGET="UPDATE Groups SET budget_by_month = :budget_by_month WHERE id = :id";
 
-    private final static String DELETE_EXPENSE="DELETE FROM Groups WHERE id = :id";
+    private final static String DELETE_GROUP ="DELETE FROM Groups WHERE id = :id";
 
     @Override
     public List<Group> getExpensesByUser(int userId){
@@ -89,7 +89,7 @@ public class GroupDAOImpl implements GroupDAO {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", idExpense);
 
-        namedParameterJdbcTemplate.update(DELETE_EXPENSE, mapSqlParameterSource);
+        namedParameterJdbcTemplate.update(DELETE_GROUP, mapSqlParameterSource);
     }
 
 }
