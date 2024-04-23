@@ -25,15 +25,16 @@ public class ExpenseRestController {
         this.participantService = participantService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getexpenses")
+    @RequestMapping(method = RequestMethod.GET, path= "/getexpenses/{id}")
     public String getAllExpenses(
-            @RequestParam(name = "id") int idUser
+           /* @RequestParam(name = "id") int idUser,*/
+            @PathVariable("id") int id
     ){
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .create();
-        return g.toJson(temporaryService.getGroupsFromUser(idUser));
+        return g.toJson(temporaryService.getGroupsFromUser(id));
 
     }
 
