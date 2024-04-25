@@ -25,7 +25,7 @@ public class ExpenseRestController {
         this.participantService = participantService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getexpenses/{id}")
+    @RequestMapping(method = RequestMethod.GET, path= "/getgroups/{id}")
     public String getAllExpenses(
            /* @RequestParam(name = "id") int idUser,*/
             @PathVariable("id") int id
@@ -38,9 +38,9 @@ public class ExpenseRestController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getsingleexpense")
+    @RequestMapping(method = RequestMethod.GET, path= "/getgroupbyid/{id}")
     public String getSingleExpense(
-            @RequestParam(name = "id") int idExpense
+            @PathVariable("id") int idExpense
     ){
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -49,9 +49,9 @@ public class ExpenseRestController {
         return g.toJson(temporaryService.getGroupById(idExpense));
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getlinedetail")
+    @RequestMapping(method = RequestMethod.GET, path= "/getdetails/{id}")
     public String getLineDetail(
-            @RequestParam(name = "id") int idLine
+            @PathVariable("id") int idLine
     ){
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -60,9 +60,9 @@ public class ExpenseRestController {
         return g.toJson(temporaryService.getDetails(idLine));
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getline")
+    @RequestMapping(method = RequestMethod.GET, path= "/getexpensebyid/{id}")
     public String getLine(
-            @RequestParam(name = "id") int idLine
+            @PathVariable("id") int idLine
     ){
         Gson g = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -131,9 +131,9 @@ public class ExpenseRestController {
         return g.toJson("OK");
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path= "/deleteexpense")
+    @RequestMapping(method = RequestMethod.DELETE, path= "/deleteexpense/{id}")
     public String deleteExpense(
-            @RequestParam(name = "id") int expenseId
+            @PathVariable("id") int expenseId
     ){
         this.temporaryService.deleteExpense(expenseId);
         Gson g = new GsonBuilder()
@@ -143,9 +143,9 @@ public class ExpenseRestController {
         return g.toJson("OK");
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path= "/deletegroup")
+    @RequestMapping(method = RequestMethod.DELETE, path= "/deletegroup/{id}")
     public String deleteGroup(
-            @RequestParam(name = "id") int groupId
+            @PathVariable("id") int groupId
     ){
         this.temporaryService.deleteGroup(groupId);
         Gson g = new GsonBuilder()
