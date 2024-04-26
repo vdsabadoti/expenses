@@ -24,7 +24,8 @@ public class GroupDAOImpl implements GroupDAO {
 
     private final static String READ_ALL_BY_USER="SELECT * FROM Groups WHERE owner_id = :owner_id";
 
-    private final static String READ_ALL="SELECT * FROM Groups WHERE id = :id";
+    private final static String FIND_BY_ID ="SELECT * FROM Groups WHERE id = :id";
+    private final static String FIND_ALL="SELECT * FROM Groups";
 
     private final static String CREATE_EXPENSE="INSERT INTO Groups (name, owner_id, description) VALUES\n" +
             "    (:name, :owner_id, :description);";
@@ -49,7 +50,15 @@ public class GroupDAOImpl implements GroupDAO {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", expenseId);
 
-        return namedParameterJdbcTemplate.queryForObject(READ_ALL, mapSqlParameterSource, new GroupRowMapper());
+        return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, mapSqlParameterSource, new GroupRowMapper());
+
+    }
+
+    @Override
+    public List<Group> getGroups(){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+
+        return namedParameterJdbcTemplate.query(FIND_ALL, mapSqlParameterSource, new GroupRowMapper());
 
     }
 

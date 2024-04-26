@@ -4,10 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class User implements UserDetails {
 
@@ -47,6 +44,10 @@ public class User implements UserDetails {
         this.authority = authority;
     }
 
+    public List<String> getBusinnessAuthorities(){
+        String[] roles = this.authority.split(",");
+        return new ArrayList<String>(Arrays.asList(roles));
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grants = new ArrayList<GrantedAuthority>();
@@ -56,7 +57,6 @@ public class User implements UserDetails {
         }
         return grants;
     }
-
     @Override
     public String getPassword() {
         return password;

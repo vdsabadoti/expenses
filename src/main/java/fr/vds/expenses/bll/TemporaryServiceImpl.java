@@ -2,10 +2,13 @@ package fr.vds.expenses.bll;
 
 import fr.vds.expenses.bo.*;
 import fr.vds.expenses.dal.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -30,9 +33,23 @@ public class TemporaryServiceImpl implements TemporaryService {
 
 	@Override
 	public List<Group> getGroupsFromUser(int userId) {
-		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(userId);
+
+		User user = userDAO.readUserById(userId);
+
+		boolean admin = false;
+		for (String role : user.getBusinnessAuthorities()){
+			if (role.equals("ROLE_ADMIN")){
+				admin = true;
+			}
+		}
 		List<Group> expensesLst = new ArrayList<>();
 
+		if (admin){
+			expensesLst = groupDAO.getGroups();
+			return expensesLst;
+		}
+
+		List<Participant> participantsByUserId = participantDAO.readParticipantsByUserId(userId);
 		for (Participant participants : participantsByUserId) {
 			//FIND EXPENSE THANKS TO USER ID (THE USER IS THE PARTICIPANT)
 			int expenseId = participants.getExpense().getId();

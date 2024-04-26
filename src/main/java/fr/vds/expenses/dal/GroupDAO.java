@@ -9,6 +9,8 @@ public interface GroupDAO {
 
     Group getExpensesById(int expenseId);
 
+    List<Group> getGroups();
+
     void createGroup(Group group);
 
     void updateGroup(Group group);
