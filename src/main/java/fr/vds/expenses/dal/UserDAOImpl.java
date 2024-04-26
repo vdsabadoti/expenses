@@ -23,6 +23,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String READ_ALL ="SELECT * FROM Users";
 
     private static final String READ_BY_ID ="SELECT * FROM Users WHERE user_id = :user_id;";
+    private static final String FIND_BY_MAIL ="SELECT * FROM Users WHERE email = :mail;";
 
     @Override
     public void createMulan(){
@@ -48,6 +49,15 @@ public class UserDAOImpl implements UserDAO {
         mapSqlParameterSource.addValue("user_id", id);
 
         return namedParameterJdbcTemplate.queryForObject(READ_BY_ID, mapSqlParameterSource, new UserRowMapper());
+
+    }
+
+    @Override
+    public User findUserByMail(String mail){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("mail", mail);
+
+        return namedParameterJdbcTemplate.queryForObject(FIND_BY_MAIL, mapSqlParameterSource, new UserRowMapper());
 
     }
 

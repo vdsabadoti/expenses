@@ -11,5 +11,7 @@ public interface UserDAO {
 
     User readUserById(int id);
 
+    User findUserByMail(String mail);
+
     List<User> readAllUsers();
 }
