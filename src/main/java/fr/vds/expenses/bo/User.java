@@ -1,10 +1,15 @@
 package fr.vds.expenses.bo;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
+public class User implements UserDetails {
 
     private int id;
     private String username;
@@ -14,7 +19,9 @@ public class User {
     private String image;
     private String quote;
 
-    public User(int id, String username, String mail, List<Group> groupsList, String password, String image, String quote) {
+    private String authority;
+
+    public User(int id, String username, String mail, List<Group> groupsList, String password, String image, String quote, String authority) {
         this.id = id;
         this.username = username;
         this.mail = mail;
@@ -22,6 +29,7 @@ public class User {
         this.password = password;
         this.image = "image in progress";
         this.quote = "all you need is love";
+        this.authority = authority;
     }
 
     public User(int id) {
@@ -31,6 +39,25 @@ public class User {
     public User() {
     }
 
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority){
+        this.authority = authority;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> grants = new ArrayList<GrantedAuthority>();
+        String[] roles = this.authority.split(",");
+        for (String role : roles) {
+            grants.add(new SimpleGrantedAuthority(role));
+        }
+        return grants;
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
@@ -49,6 +76,26 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setUsername(String username) {
