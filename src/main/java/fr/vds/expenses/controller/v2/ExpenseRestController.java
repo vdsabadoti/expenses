@@ -1,16 +1,10 @@
-package fr.vds.expenses.controller;
+package fr.vds.expenses.controller.v2;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import fr.vds.expenses.adaptations.LocalDateTimeTypeAdapter;
-import fr.vds.expenses.adaptations.LocalDateTypeAdapter;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
 import fr.vds.expenses.bo.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 // http://localhost:8080/swagger-ui/index.html#/

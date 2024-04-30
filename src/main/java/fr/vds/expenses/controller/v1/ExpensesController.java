@@ -1,4 +1,4 @@
-package fr.vds.expenses.controller;
+package fr.vds.expenses.controller.v1;
 
 import fr.vds.expenses.bll.LoginService;
 import fr.vds.expenses.bll.ParticipantService;
