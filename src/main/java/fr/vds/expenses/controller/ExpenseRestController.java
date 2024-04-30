@@ -6,15 +6,16 @@ import fr.vds.expenses.adaptations.LocalDateTimeTypeAdapter;
 import fr.vds.expenses.adaptations.LocalDateTypeAdapter;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
-import fr.vds.expenses.bo.Group;
-import fr.vds.expenses.bo.CreateExpenseInterface;
+import fr.vds.expenses.bo.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+// http://localhost:8080/swagger-ui/index.html#/
 @CrossOrigin(origins = "http://localhost:4200")
-@org.springframework.web.bind.annotation.RestController
+@RestController
 public class ExpenseRestController {
 
     private TemporaryService temporaryService;
@@ -25,134 +26,82 @@ public class ExpenseRestController {
         this.participantService = participantService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getgroups/{id}")
-    public String getAllExpenses(
-           /* @RequestParam(name = "id") int idUser,*/
+    //---------------------------------------------------------------------------------------------------- V2 : ResponseService + JSON auto
+
+    @RequestMapping(method = RequestMethod.GET, path= "/v2/getdetails/{id}")
+    public ResponseService<List<Detail>> getDetails(
             @PathVariable("id") int id
     ){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(temporaryService.getGroupsFromUser(id));
+        ResponseService<List<Detail>> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = temporaryService.getDetails(id);
 
+        return responseService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getgroupbyid/{id}")
-    public String getSingleExpense(
-            @PathVariable("id") int idExpense
+    @RequestMapping(method = RequestMethod.GET, path= "/v2/getexpensebyid/{id}")
+    public ResponseService<Expense> getExpense(
+            @PathVariable("id") int id
     ){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(temporaryService.getGroupById(idExpense));
+        ResponseService<Expense> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = temporaryService.getExpenseById(id);
+
+        return responseService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getdetails/{id}")
-    public String getLineDetail(
-            @PathVariable("id") int idLine
-    ){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(temporaryService.getDetails(idLine));
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/getexpensebyid/{id}")
-    public String getLine(
-            @PathVariable("id") int idLine
-    ){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(temporaryService.getExpenseById(idLine));
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path= "/creategroup")
-    public String createGroup(
-            @RequestBody Group group
-    ){
-        temporaryService.createGroup(group);
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson("OK");
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path= "/updategroup")
-    public String updateGroup(
-            @RequestBody Group group
-    ){
-        temporaryService.updateGroup(group);
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson("OK");
-    }
- // http://localhost:8080/swagger-ui/index.html#/
-
-    @RequestMapping(method = RequestMethod.GET, path = "/getparticipants")
-    public String getParticipantsOfGroup(
-            @RequestParam(name = "groupid") int idGroup
+    @RequestMapping(method = RequestMethod.GET, path = "/v2/getparticipants")
+    public ResponseService<List<Participant>> getParticipants(
+            @RequestParam(name = "groupid") int id
     ) {
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(participantService.getAllTheParticipantsOfGroup(idGroup));
+        ResponseService<List<Participant>> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = participantService.getAllTheParticipantsOfGroup(id);
+
+        return responseService;
+
     }
 
-    @RequestMapping(method = RequestMethod.POST, path= "/createexpense")
-    public String createExpense(
+    @RequestMapping(method = RequestMethod.POST, path= "/v2/createexpense")
+    public ResponseService<Expense> newExpense(
             @RequestBody CreateExpenseInterface createExpenseInterface
     ){
-        this.temporaryService.createExpense(createExpenseInterface.getId(), createExpenseInterface.getExpense());
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson("OK");
+        this.temporaryService.createExpense(createExpenseInterface.getGrouipId(), createExpenseInterface.getExpense());
+        ResponseService<Expense> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = createExpenseInterface.getExpense();
+
+        return responseService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path= "/updateexpense")
-    public String updateExpense(
+    @RequestMapping(method = RequestMethod.POST, path= "/v2/updateexpense")
+    public ResponseService<Expense> updtExpense(
             @RequestBody CreateExpenseInterface createExpenseInterface
     ){
-        this.temporaryService.updateExpense(createExpenseInterface.getId(), createExpenseInterface.getExpense());
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson("OK");
+        this.temporaryService.updateExpense(createExpenseInterface.getGrouipId(), createExpenseInterface.getExpense());
+        ResponseService<Expense> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = createExpenseInterface.getExpense();
+
+        return responseService;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path= "/deleteexpense/{id}")
-    public String deleteExpense(
+    @RequestMapping(method = RequestMethod.DELETE, path= "/v2/deleteexpense/{id}")
+    public ResponseService<Expense> delExpense(
             @PathVariable("id") int expenseId
     ){
         this.temporaryService.deleteExpense(expenseId);
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson("OK");
-    }
+        ResponseService<Expense> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = null;
 
-    @RequestMapping(method = RequestMethod.DELETE, path= "/deletegroup/{id}")
-    public String deleteGroup(
-            @PathVariable("id") int groupId
-    ){
-        this.temporaryService.deleteGroup(groupId);
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson("OK");
+        return responseService;
     }
 
 }
