@@ -6,6 +6,8 @@ import fr.vds.expenses.adaptations.LocalDateTimeTypeAdapter;
 import fr.vds.expenses.adaptations.LocalDateTypeAdapter;
 import fr.vds.expenses.bll.ParticipantService;
 import fr.vds.expenses.bll.TemporaryService;
+import fr.vds.expenses.bo.ResponseService;
+import fr.vds.expenses.bo.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+// http://localhost:8080/swagger-ui/index.html#/
 @CrossOrigin(origins = "http://localhost:4200")
 @org.springframework.web.bind.annotation.RestController
 public class UserRestController {
@@ -26,24 +30,26 @@ public class UserRestController {
         this.participantService = participantService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/getallusers")
-    public String getAllUsers(){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(participantService.getAllTheUsersFromDatabase());
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/getuser")
-    public String getUserByID(
+    @RequestMapping(method = RequestMethod.GET, path= "/v2/getuser")
+    public ResponseService<User> getUserByID(
             @RequestParam(name = "id") int idUser
     ){
-        Gson g = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .create();
-        return g.toJson(participantService.getUserFromDataBase(idUser));
+        ResponseService<User> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = participantService.getUserFromDataBase(idUser);
+
+        return responseService;
     }
+
+    @RequestMapping(method = RequestMethod.GET, path= "/v2/getallusers")
+    public ResponseService<List<User>> getAllUsers(){
+        ResponseService<List<User>> responseService = new ResponseService<>();
+        responseService.code = "200";
+        responseService.message = "Success";
+        responseService.data = participantService.getAllTheUsersFromDatabase();
+        return responseService;
+    }
+
 
 }
