@@ -29,6 +29,15 @@ public class User implements UserDetails {
         this.authority = authority;
     }
 
+    public User(String username, String mail, String password) {
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+        this.image = "image in progress";
+        this.quote = "all you need is love";
+    }
+
+
     public User(int id) {
         this.id = id;
     }
