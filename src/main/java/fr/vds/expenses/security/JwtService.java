@@ -28,7 +28,7 @@ public class JwtService {
 
     public User findUserByMail(String mail){
         //TODO verify PASSWORD
-        return this.userDAO.findUserByMail(mail);
+        return this.userDAO.findUserByMail(mail).get();
     }
     public Key getSecretKey(){
         //on transforme la cle en bytes

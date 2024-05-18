@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -53,13 +54,22 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User findUserByMail(String mail){
+    public Optional<User> findUserByMail(String mail){
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("mail", mail);
 
-        return namedParameterJdbcTemplate.queryForObject(FIND_BY_MAIL, mapSqlParameterSource, new UserRowMapper());
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(FIND_BY_MAIL, mapSqlParameterSource, new UserRowMapper()));
 
     }
+
+    @Override
+    public List<User> readAllUsersByMail(String mail){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("mail", mail);
+
+        return namedParameterJdbcTemplate.query(FIND_BY_MAIL, mapSqlParameterSource, new UserRowMapper());
+    }
+
 
     @Override
     public List<User> readAllUsers(){
