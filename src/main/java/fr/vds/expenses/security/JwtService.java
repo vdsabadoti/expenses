@@ -1,6 +1,7 @@
 package fr.vds.expenses.security;
 
 import fr.vds.expenses.bo.User;
+import fr.vds.expenses.dal.UserDAO;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +20,16 @@ public class JwtService {
     //SpringCore => on va chercher dans application.properties la valeur de la variable
     @Value("${app.jwt.secret}")
     private String SECRET_KEY;
+    private UserDAO userDAO;
 
+    public JwtService(UserDAO userDAO){
+        this.userDAO = userDAO;
+    }
+
+    public User findUserByMail(String mail){
+        //TODO verify PASSWORD
+        return this.userDAO.findUserByMail(mail);
+    }
     public Key getSecretKey(){
         //on transforme la cle en bytes
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
