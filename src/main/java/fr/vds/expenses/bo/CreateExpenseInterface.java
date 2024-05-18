@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public class CreateExpenseInterface {
 
-    private int grouipId;
+    private int id;
     private Expense expense;
 
     public CreateExpenseInterface(){
 
     }
-    public CreateExpenseInterface(int grouipId, Expense expense) {
-        this.grouipId = grouipId;
+    public CreateExpenseInterface(int id, Expense expense) {
+        this.id = id;
     }
 
     public Expense getExpense() {
@@ -22,12 +22,12 @@ public class CreateExpenseInterface {
         this.expense = expense;
     }
 
-    public int getGrouipId() {
-        return grouipId;
+    public int getId() {
+        return id;
     }
 
-    public void setGrouipId(int grouipId) {
-        this.grouipId = grouipId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -35,11 +35,11 @@ public class CreateExpenseInterface {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CreateExpenseInterface that = (CreateExpenseInterface) o;
-        return grouipId == that.grouipId && Objects.equals(expense, that.expense);
+        return id == that.id && Objects.equals(expense, that.expense);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(grouipId, expense);
+        return Objects.hash(id, expense);
     }
 }

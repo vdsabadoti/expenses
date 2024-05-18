@@ -63,7 +63,7 @@ public class ExpenseRestController {
     public ResponseService<Expense> newExpense(
             @RequestBody CreateExpenseInterface createExpenseInterface
     ){
-        this.temporaryService.createExpense(createExpenseInterface.getGrouipId(), createExpenseInterface.getExpense());
+        this.temporaryService.createExpense(createExpenseInterface.getId(), createExpenseInterface.getExpense());
         ResponseService<Expense> responseService = new ResponseService<>();
         responseService.code = "200";
         responseService.message = "Success";
@@ -76,7 +76,7 @@ public class ExpenseRestController {
     public ResponseService<Expense> updtExpense(
             @RequestBody CreateExpenseInterface createExpenseInterface
     ){
-        this.temporaryService.updateExpense(createExpenseInterface.getGrouipId(), createExpenseInterface.getExpense());
+        this.temporaryService.updateExpense(createExpenseInterface.getId(), createExpenseInterface.getExpense());
         ResponseService<Expense> responseService = new ResponseService<>();
         responseService.code = "200";
         responseService.message = "Success";
