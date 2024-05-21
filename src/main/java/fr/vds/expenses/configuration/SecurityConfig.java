@@ -48,8 +48,9 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(
 				(authorizeRequests) -> {
 					authorizeRequests
-							//.requestMatchers(HttpMethod.GET, "/getallusers").authenticated()
-							.anyRequest().permitAll();
+							.requestMatchers(HttpMethod.POST, "/login").permitAll()
+							.requestMatchers(HttpMethod.GET, "/getallusers").permitAll()
+							.anyRequest().authenticated();
 				}
 		);
 		/*
